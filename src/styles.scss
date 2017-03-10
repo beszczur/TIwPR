@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+$parent-size-percent: 94%;
+
+.child{
+  padding: 5px 10px;
+  border-radius: 3px;
+  width: $parent-size-percent;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+}

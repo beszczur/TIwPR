@@ -3,11 +3,17 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppComponent } from './app.component';
+import { TaskComponent } from './week/day/event/task/task.component';
+import { DayComponent } from './week/day/day.component';
+import { WeekComponent } from './week/week.component';
+import { EventComponent } from './week/day/event/event.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    TaskComponent,
+    DayComponent,
+    WeekComponent,
+    EventComponent
   ],
   imports: [
     BrowserModule,
@@ -15,6 +21,6 @@ import { AppComponent } from './app.component';
     HttpModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [WeekComponent]
 })
 export class AppModule { }

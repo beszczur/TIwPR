@@ -1,0 +1,13 @@
+<div class="col-lg-2 col-md-6 col-sm-12" >
+  <div class="panel" style="background-color: aqua">
+    <div class="panel-heading">
+      {{ day }}
+      <small class="text-muted pull-right">2017-09-09</small>
+    </div>
+    <div class="panel-body">
+    </div>
+    <ul class="list-group">
+      <app-event *ngFor="let event of events" [event]="event"></app-event>
+    </ul>
+  </div>
+</div>
