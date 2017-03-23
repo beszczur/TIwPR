@@ -7,13 +7,15 @@ import { TaskComponent } from './week/day/event/task/task.component';
 import { DayComponent } from './week/day/day.component';
 import { WeekComponent } from './week/week.component';
 import { EventComponent } from './week/day/event/event.component';
+import { EventModalComponent } from './week/day/event/event-modal/event-modal.component';
 
 @NgModule({
   declarations: [
     TaskComponent,
     DayComponent,
     WeekComponent,
-    EventComponent
+    EventComponent,
+    EventModalComponent
   ],
   imports: [
     BrowserModule,

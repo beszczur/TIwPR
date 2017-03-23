@@ -7,7 +7,7 @@ import {Component, OnInit, Output} from '@angular/core';
 })
 export class WeekComponent implements OnInit {
 
-  days = ["PONIEDZIAŁEK", "WTOREK", "ŚRODA", "CZWARTEK", "PIĄTEK", "SOBOTA"];
+  days = ["PONIEDZIAŁEK", "WTOREK", "ŚRODA", "CZWARTEK", "PIĄTEK", "WEEKEND"];
   constructor() { }
 
   ngOnInit() {

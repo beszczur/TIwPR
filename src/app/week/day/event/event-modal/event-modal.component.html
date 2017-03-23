@@ -1,0 +1,38 @@
+<!-- Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Dodaj wydarzenie</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="eventName">Nazwa</label>
+            <input type="text" class="form-control" id="eventName" placeholder="Nazwa">
+          </div>
+          <div class="form-group">
+            <label for="priority">Priorytet</label>
+            <input type="number" class="form-control" id="priority" placeholder="Priorytet">
+          </div>
+          <div class="form-group">
+            <label for="date">Data</label>
+            <input type="date" class="form-control" id="date" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label for="isRepeatable">Powtarzalne</label>
+            <input type="checkbox" class="form-control" id="isRepeatable">
+          </div>
+          <div>
+            Opcje powtarzania
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+        <button type="button" class="btn btn-primary">Zapisz</button>
+      </div>
+    </div>
+  </div>
+</div>
