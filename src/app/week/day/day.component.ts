@@ -8,7 +8,6 @@ import {Component, OnInit, Input} from '@angular/core';
 export class DayComponent implements OnInit {
 
   @Input() day: string;
-  events = ["Przedmiot 1", "Przedmiot 2"];
   constructor() { }
 
   ngOnInit() {

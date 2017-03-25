@@ -1,18 +1,18 @@
-<div class="child task">
+<div class="child" [ngClass]="{'NEW': task.status==status.NEW , 'IN_PROGRESS': task.status==status.IN_PROGRESS, 'DONE': task.status==status.DONE, 'CANCELED': task.status==status.CANCELED, 'OUT_OF_DATE': task.status==status.OUT_OF_DATE}">
   <h5>
     <div class="dropdown pull-right">
       <div id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         <span class="caret"></span>
       </div>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-        <li><a href="#">IN PROGRESS</a></li>
-        <li><a href="#">DONE</a></li>
-        <li><a href="#">CANCEL</a></li>
-        <li><a href="#">OUT OF DATE</a></li>
+        <li (click)="changeState(status.IN_PROGRESS)"><a href="#">IN PROGRESS</a></li>
+        <li (click)="changeState(status.DONE)"><a href="#">DONE</a></li>
+        <li (click)="changeState(status.CANCELED)"><a href="#">CANCEL</a></li>
+        <li (click)="changeState(status.OUT_OF_DATE)"><a href="#">OUT OF DATE</a></li>
         <li role="separator" class="divider"></li>
         <li><a href="#">DELETE</a></li>
       </ul>
     </div>
-    {{ task }}
+    {{ task.name }}
   </h5>
 </div>

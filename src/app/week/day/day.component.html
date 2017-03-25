@@ -1,15 +1,15 @@
 <div class="col-lg-2 col-md-4 col-sm-12" >
   <div class="panel" style="background-color: aqua">
     <div class="panel-heading">
-      {{ day }}
+      {{ day.name }}
       <a class="pull-right" data-toggle="modal" data-target="#eventModal"><i style="margin-left: 5px;" class="material-icons">library_add</i></a>
       <app-event-modal [type]="ADD"></app-event-modal>
-      <small class="text-muted pull-right">2017-09-09</small>
+      <small class="text-muted pull-right">{{ day.date }}</small>
     </div>
     <div class="panel-body">
     </div>
     <ul class="list-group">
-      <app-event *ngFor="let event of events" [event]="event"></app-event>
+      <app-event *ngFor="let event of day.events" [event]="event"></app-event>
     </ul>
   </div>
 </div>

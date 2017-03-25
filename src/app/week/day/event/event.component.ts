@@ -8,7 +8,7 @@ import {Component, OnInit, Input} from '@angular/core';
 export class EventComponent implements OnInit {
 
   @Input() event: string;
-  tasks = ["task1", "task2"];
+
   constructor() { }
 
   ngOnInit() {
