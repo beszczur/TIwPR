@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Status} from "./status";
-import {Task} from "./task";
+import {Status} from "../../models/status";
+import {Task} from "../../models/task";
 
 @Component({
   selector: 'app-task',

@@ -1,12 +1,12 @@
 import {Component, OnInit, Output} from '@angular/core';
 import {Observable} from "rxjs";
-import {DataproviderService} from "../dataprovider.service";
-import {Task} from "./day/event/task/task";
+import {DataproviderService} from "../../dataproviders/dataprovider.service";
+import {Task} from "../../models/task";
 
 @Component({
   selector: 'app-week',
-  templateUrl: './week.component.html',
-  styleUrls: ['./week.component.scss'],
+  templateUrl: 'week.component.html',
+  styleUrls: ['week.component.scss'],
   providers: [DataproviderService],
 })
 export class WeekComponent implements OnInit {

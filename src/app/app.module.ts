@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { TaskComponent } from './week/day/event/task/task.component';
-import { DayComponent } from './week/day/day.component';
-import { WeekComponent } from './week/week.component';
-import { EventComponent } from './week/day/event/event.component';
-import { EventModalComponent } from './week/day/event/event-modal/event-modal.component';
+import { TaskComponent } from './components/task/task.component';
+import { DayComponent } from './components/day/day.component';
+import { WeekComponent } from './components/week/week.component';
+import { EventComponent } from './components/event/event.component';
+import { EventModalComponent } from './components/event-modal/event-modal.component';
 
 @NgModule({
   declarations: [
