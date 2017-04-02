@@ -2,7 +2,7 @@
   <div class="panel" style="background-color: aqua">
     <div class="panel-heading">
       {{ day.name }}
-      <a class="pull-right" data-toggle="modal" data-target="#eventModal"><i style="margin-left: 5px;" class="material-icons">library_add</i></a>
+      <a class="pull-right" data-toggle="modal" data-target="#eventModal"><i id="addButton" style="margin-left: 5px;" class="material-icons">library_add</i></a>
       <app-event-modal [type]="ADD"></app-event-modal>
       <small class="text-muted pull-right">{{ day.date }}</small>
     </div>

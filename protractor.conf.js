@@ -45,7 +45,7 @@ exports.config = {
     'tests/*/*.feature'
   ],
 
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'http://localhost:4200/',
 
   cucumberOpts: {
     require: 'tests/step_definitions/stepDefinitions.js',

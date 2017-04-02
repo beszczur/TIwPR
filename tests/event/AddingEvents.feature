@@ -1,7 +1,7 @@
 Feature: User has possibility to add, edit, update or delete events
 
   Scenario: Adding new events
-    Given I am on main page
+    Given I go to homepage
     When I click on "Add new event" button
     Then I should see "Add event" modal
      # with "Add event" as modal title
@@ -14,11 +14,11 @@ Feature: User has possibility to add, edit, update or delete events
 #    on main page in proper column
 
   Scenario: Adding new repeatable events
-    Given I am on main page
+    Given I go to homepage
 #     When I ...
 
   Scenario: Delete event
-    Given I am on main page
+    Given I go to homepage
     When I click on "Edit event" button on "My event 666"
     Then I should see "Update event" modal
     When I click on "Delete" button
