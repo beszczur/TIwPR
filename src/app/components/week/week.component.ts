@@ -13,64 +13,72 @@ export class WeekComponent implements OnInit {
 
   private plan: any[] = [
     {
-      name: "PONIEDZIAŁEK",
-      date: "2017-04-03",
+      name: "MONDAY",
+      date: "2017-04-24",
       events:
         [{
           name: 'ZSK',
           tasks: [
-            new Task(1, "Zadanie 1 z konstruktora", 0, 0, '2017-04-03'),
-            new Task(2, "Zadanie 2 z konstruktora", 0, 1, '2017-04-03'),
+            new Task(1, "Zadanie 1 z konstruktora", 0, 0, '2017-04-24'),
+            new Task(2, "Zadanie 2 z konstruktora", 0, 1, '2017-04-24'),
           ]
         },
           {
             name: 'Angielski',
             tasks: [
-              new Task(3, "Zadanie 1A z konstruktora", 0, 0, '2017-04-03'),
-              new Task(4, "Zadanie 2A z konstruktora", 0, 1, '2017-04-03'),
+              new Task(3, "Zadanie 1A z konstruktora", 0, 0, '2017-04-24'),
+              new Task(4, "Zadanie 2A z konstruktora", 0, 1, '2017-04-24'),
             ]
           },
         ]
     },
     {
-      name: "WTOREK",
-      date: "2017-04-04",
+      name: "TUESDAY",
+      date: "2017-04-25",
       events:
         [{
           name: 'Praca',
           tasks: [
-            new Task(5, "Zadanie 1C z konstruktora", 0, 0, '2017-04-04'),
-            new Task(6, "Zadanie 2C z konstruktora", 1, 1, '2017-04-04'),
+            new Task(5, "TASK 1C", 0, 0, '2017-04-25'),
+            new Task(6, "TASK 2C", 1, 1, '2017-04-25'),
           ]
         },
           {
             name: 'NT4G',
             tasks: [
-              new Task(7, "Zadanie 1A z konstruktora", 1, 0, '2017-04-04'),
-              new Task(8, "Zadanie 2A z konstruktora", 0, 1, '2017-04-04'),
+              new Task(7, "Task 1A", 1, 0, '2017-04-25'),
+              new Task(8, "Task 2A", 0, 1, '2017-04-25'),
             ]
           },
         ]
     },
     {
-      name: "ŚRODA",
-      date: "2017-04-05",
+      name: "WEDNESDAY",
+      date: "2017-04-26",
       events: []
     },
     {
-      name: "CZWARTEK",
-      date: "2017-04-06",
+      name: "TUESDAY",
+      date: "2017-04-27",
       events: []
     },
     {
-      name: "PIĄTEK",
-      date: "2017-04-07",
+      name: "FRIDAY",
+      date: "2017-04-28",
       events: []
     },
     {
       name: "WEEKEND",
-      date: "2017-04-08/2017-04-09",
-      events: []
+      date: "2017-04-29/2017-04-30",
+      events: [
+        {
+          name: 'Trip preparation',
+          tasks: [
+            new Task(9, "packing", 0, 0, '2017-04-29'),
+            new Task(10, "bike cleaning", 0, 0, '2017-04-29'),
+          ]
+        },
+      ]
     }
   ];
 

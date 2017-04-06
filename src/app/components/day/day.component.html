@@ -1,13 +1,13 @@
-<div class="col-lg-2 col-md-4 col-sm-12" >
+<div id="day{{id}}" class="col-lg-2 col-md-4 col-sm-12" >
   <div class="panel" style="background-color: aqua">
     <div class="panel-heading">
-      {{ day.name }}
-      <a class="pull-right" data-toggle="modal" data-target="#eventModal"><i id="addButton" style="margin-left: 5px;" class="material-icons">library_add</i></a>
-      <app-event-modal [type]="ADD"></app-event-modal>
-      <small class="text-muted pull-right">{{ day.date }}</small>
+      <b style="font-size: 18px">{{ day.name }}</b>
+      <a class="pull-right" data-toggle="modal" data-target="#eventModal" (click)="addModalFunction(day.date)">
+      <i id="addButton" style="margin-left: 7px;" class="material-icons">add_box</i></a>
+      <app-event-modal [event]="event" [type]="add"></app-event-modal>
+      <small class="text-muted pull-right" style="margin-top: 5px">{{ day.date }}</small>
     </div>
-    <div class="panel-body">
-    </div>
+    <div style="padding: 5px"></div>
     <ul class="list-group">
       <app-event *ngFor="let event of day.events" [event]="event"></app-event>
     </ul>
