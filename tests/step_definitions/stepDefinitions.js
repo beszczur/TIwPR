@@ -1,5 +1,6 @@
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
+var chai = require('chai'),
+    chaiAsPromised = require('chai-as-promised')
+config = require('../config/protractor.conf.js');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
@@ -13,19 +14,19 @@ var modals = {
 };
 
 module.exports = function() {
-  this.Given(/^I go to homepage$/, function () {
-    browser.get("http://localhost:4200/");
-    // browser.baseUrl
-    // expect(element(by.id('clock')).isPresent()).toBeTruthy();//.then(callback);
-    // expect(element(by.id('clock')).isPresent()).toBe(true);
-    // expect(element(by.id('clock'))).not.toBe(0);
-   // expect(true).to.be.true;
-   //  var myElement = element(by.id('clock'));
-   //  expect(myElement.isPresent()).toBeFalsy();
+  this.Given(/^I go to homepage$/, function (callback) {
+    browser.get(config.config.baseURL)
+      // .then(function() {
+      //   element(by.className('beata')).isPresent()
+      //     .then(function(res) {console.log(res);})
+      // })
+      .then(callback);
+      // .then(function () {expect(element(by.id('clock')).isPresent()).to.eventually.be.false.and.notify(callback);})
   });
 
-  this.When(/^I click on "([^"]*)" button$/, function (buttonText) {
-    element(by.id(buttons[buttonText])).click();
+  this.When(/^I click on "([^"]*)" button$/, function (buttonText, callback) {
+    element(by.id(buttons[buttonText])).click()
+      .then(callback);
   });
 
   this.Then(/^I should see "([^"]*)" modal$/, function (modalTitle) {

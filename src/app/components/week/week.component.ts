@@ -82,7 +82,7 @@ export class WeekComponent implements OnInit {
     }
   ];
 
-  whatTime = Observable.interval(1000).map(x => new Date()).share();
+  //whatTime = Observable.interval(1000).map(x => new Date()).share();
 
   constructor(private dataProvider: DataproviderService) {}
 

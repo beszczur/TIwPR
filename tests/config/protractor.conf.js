@@ -31,8 +31,8 @@
 
 exports.config = {
   seleniumAddress: 'http://127.0.0.1:4444/wd/hub',
-  getPageTimeout: 60000,
-  allScriptsTimeout: 500000,
+  // getPageTimeout: 60000,
+  allScriptsTimeout: 50000,
   framework: 'custom',
   // path relative to the current config file
   frameworkPath: require.resolve('protractor-cucumber-framework'),
@@ -42,13 +42,13 @@ exports.config = {
 
   // Spec patterns are relative to this directory.
   specs: [
-    'tests/*/*.feature'
+    '../*/*.feature'
   ],
 
   baseURL: 'http://localhost:4200/',
 
   cucumberOpts: {
-    require: 'tests/step_definitions/stepDefinitions.js',
+    require: ['../step_definitions/stepDefinitions.js', 'env.js'],
     tags: false,
     format: 'pretty',
     profile: false,
