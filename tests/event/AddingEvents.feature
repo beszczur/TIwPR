@@ -5,9 +5,9 @@ Feature: User has possibility to add, edit, update or delete events
     When I click on "Add new event" button
     Then I should see "Add event" modal
      # with "Add event" as modal title
-    When I fill in "Name" filed with "My new event"
+    When I fill in "Event name" filed with "My new event"
     And I fill in "Priority" filed with "1"
-    And I should see "04/01/2017" in date filed
+    And I should see "2017-04-24" in "Date" filed
     When I click on "Save" button
     Then I should see popup with text "New event was created"
     And I should see "My new event"
