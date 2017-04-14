@@ -1,0 +1,17 @@
+{
+  "buttons": {
+    "Add new event": "addButton"
+  },
+
+  "modals": {
+    "Add event": "eventModal"
+  },
+
+  "inputFields": {
+    "Event name": "eventName",
+    "Priority": "priority",
+    "Date": "date"
+  }
+}
+
+

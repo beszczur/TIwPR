@@ -47,6 +47,8 @@ exports.config = {
 
   baseURL: 'http://localhost:4200/',
 
+  useAllAngular2AppRoots: true,
+
   cucumberOpts: {
     require: ['../step_definitions/stepDefinitions.js', 'env.js'],
     tags: false,

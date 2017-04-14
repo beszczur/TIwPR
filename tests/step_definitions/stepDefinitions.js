@@ -1,24 +1,10 @@
 var chai = require('chai'),
-    chaiAsPromised = require('chai-as-promised')
-config = require('../config/protractor.conf.js');
+    chaiAsPromised = require('chai-as-promised'),
+    config = require('../config/protractor.conf.js'),
+    elements = require('./elements.json');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
-
-var buttons = {
-  "Add new event": "addButton"
-};
-
-var modals = {
-  "Add event": "eventModal"
-};
-
-var inputFields = {
-  // **** EVENT MODAL ****
-  "Event name": "eventName",
-  "Priority": "priority",
-  "Date": "date",
-};
 
 /*
   ********* HELP **********
@@ -41,28 +27,25 @@ module.exports = function() {
   });
 
   this.When(/^I click on "([^"]*)" button$/, function (buttonText, callback) {
-    element(by.id(buttons[buttonText])).click()
+    element(by.id(elements.buttons[buttonText])).click()
       .then(callback);
   });
 
   this.Then(/^I should see "([^"]*)" modal$/, function (modalTitle, callback) {
-    expect(element(by.id(modals[modalTitle])).isPresent())
+    expect(element(by.id(elements.modals[modalTitle])).isPresent())
       .to.eventually.be.true.and.notify(callback);
   });
 
   this.When(/^I fill in "([^"]*)" filed with "([^"]*)"$/, function (inputFieldLabel, fieldContent, callback) {
-    element(by.id(inputFields[inputFieldLabel])).clear(); // ************************** creepy ***********************************
-    element(by.id(inputFields[inputFieldLabel])).sendKeys(fieldContent);
+    element(by.id(elements.inputFields[inputFieldLabel])).clear(); // ************************** creepy ***********************************
+    element(by.id(elements.inputFields[inputFieldLabel])).sendKeys(fieldContent);
     browser.driver.sleep(2000)
       .then(callback);
   });
 
   this.When(/^I should see "([^"]*)" in "([^"]*)" filed$/, function (fileContent, inputFieldLabel, callback) {
-    //expect(element(by.id(inputFields[fileContent])).getValue().to.eventually.be.true.and.notify(callback);
-    expect(element(by.id(inputFields[inputFieldLabel])).getAttribute('value')).to.eventually.equal(fileContent)
-      .then(callback);
-/*    page.getCurrentUser().then(function(text) {
-      expect(text).toEqual("Randy Savage");*/
+    expect(element(by.id(elements.inputFields[inputFieldLabel])).getAttribute('value')).to.eventually.equal(fileContent)
+      .and.notify(callback);
   });
 
   this.Then(/^I should see popup with text "([^"]*)"$/, function (arg1, callback) {
