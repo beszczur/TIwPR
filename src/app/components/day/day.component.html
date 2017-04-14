@@ -4,7 +4,6 @@
       <b style="font-size: 18px">{{ day.name }}</b>
       <a class="pull-right" data-toggle="modal" data-target="#eventModal" (click)="addModalFunction(day.date)">
       <i id="addButton" style="margin-left: 7px;" class="material-icons">add_box</i></a>
-      <app-event-modal [event]="event" [type]="add"></app-event-modal>
       <small class="text-muted pull-right" style="margin-top: 5px">{{ day.date }}</small>
     </div>
     <div style="padding: 5px"></div>

@@ -8,13 +8,18 @@ import {Event} from '../../models/event'
 })
 export class EventModalComponent implements OnInit {
 
-  @Input() type: string;
-  @Input() event: Event;
+  isRepeatable : boolean = false;
 
   constructor() {
   }
 
   ngOnInit() {
+  }
+
+  onClose(){
+    (<HTMLInputElement>document.getElementById("date")).value = "";
+    (<HTMLInputElement>document.getElementById("eventName")).value = "";
+    (<HTMLInputElement>document.getElementById("priority")).value = "";
   }
 
 }

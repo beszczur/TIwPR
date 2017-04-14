@@ -18,9 +18,7 @@ export class DayComponent implements OnInit {
   }
 
   addModalFunction(date: string){
-    this.event.date = date;
-    this.event.isRepeatable = false;
-    console.log(this.event);
+    (<HTMLInputElement>document.getElementById("date")).value = date;
   }
 
 }
