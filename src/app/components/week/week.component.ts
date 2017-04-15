@@ -17,17 +17,19 @@ export class WeekComponent implements OnInit {
       date: "2017-04-24",
       events:
         [{
+          id: 1,
           name: 'ZSK',
           tasks: [
-            new Task(1, "Zadanie 1 z konstruktora", 0, 0, '2017-04-24'),
-            new Task(2, "Zadanie 2 z konstruktora", 0, 1, '2017-04-24'),
+            new Task(1, 1, "Zadanie 1 z konstruktora", 0, 0),
+            new Task(2, 1, "Zadanie 2 z konstruktora", 0, 1),
           ]
         },
           {
+            id: 2,
             name: 'Angielski',
             tasks: [
-              new Task(3, "Zadanie 1A z konstruktora", 0, 0, '2017-04-24'),
-              new Task(4, "Zadanie 2A z konstruktora", 0, 1, '2017-04-24'),
+              new Task(3, 2, "Zadanie 1A z konstruktora", 0, 0),
+              new Task(4, 2, "Zadanie 2A z konstruktora", 0, 1),
             ]
           },
         ]
@@ -37,17 +39,19 @@ export class WeekComponent implements OnInit {
       date: "2017-04-25",
       events:
         [{
+          id: 3,
           name: 'Praca',
           tasks: [
-            new Task(5, "TASK 1C", 0, 0, '2017-04-25'),
-            new Task(6, "TASK 2C", 1, 1, '2017-04-25'),
+            new Task(5, 3, "TASK 1C", 0, 0),
+            new Task(6, 3, "TASK 2C", 1, 1),
           ]
         },
           {
+            id: 4,
             name: 'NT4G',
             tasks: [
-              new Task(7, "Task 1A", 1, 0, '2017-04-25'),
-              new Task(8, "Task 2A", 0, 1, '2017-04-25'),
+              new Task(7, 4, "Task 1A", 1, 0),
+              new Task(8, 4, "Task 2A", 0, 1),
             ]
           },
         ]
@@ -72,10 +76,11 @@ export class WeekComponent implements OnInit {
       date: "2017-04-29/2017-04-30",
       events: [
         {
+          id: 5,
           name: 'Trip preparation',
           tasks: [
-            new Task(9, "packing", 0, 0, '2017-04-29'),
-            new Task(10, "bike cleaning", 0, 0, '2017-04-29'),
+            new Task(9, 5, "packing", 0, 0),
+            new Task(10, 5,"bike cleaning", 0, 0),
           ]
         },
       ]

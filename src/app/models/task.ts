@@ -1,9 +1,18 @@
 export class Task {
-  // id: Number;
-  // name: string;
-  // status: Number;
-  // position: Number;
-  // date: string;
 
-  constructor(private id: Number, private name: String, public status: Number, private position: Number, private date: string){};
+  public NEW: number = 0;
+  public IN_PROGRESS: number = 1;
+  public OUT_OF_DATE: number = 2;
+  public CANCELED: number = 3;
+  public DONE: number = 4;
+
+  constructor(
+    public id: number,
+    public eventId: number,
+    public name: string,
+    public status: number,
+    public position: number
+  ){
+
+  };
 }

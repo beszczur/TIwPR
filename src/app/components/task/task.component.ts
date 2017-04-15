@@ -1,5 +1,4 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Status} from "../../models/status";
 import {Task} from "../../models/task";
 
 @Component({
@@ -10,15 +9,21 @@ import {Task} from "../../models/task";
 export class TaskComponent implements OnInit {
 
   @Input() task: Task;
-  status = new Status();
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  changeState(new_state: Number){
+  changeState(new_state: number){
     this.task.status = new_state;
+  }
+
+  taskEditModal(){
+    (<HTMLInputElement>document.getElementById('taskName')).value = this.task.name;
+    (<HTMLInputElement>document.getElementById('taskPriority')).value = (this.task.position).toString();
+    //(<HTMLInputElement>document.getElementById('taskId')).value = (this.task.id).toString();
+    (<HTMLInputElement>document.getElementById('eventId')).value = (this.task.eventId).toString();
   }
 
 }

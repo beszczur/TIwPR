@@ -3,7 +3,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" (click)="onClose()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Add task</h4>
       </div>
       <div class="modal-body">
@@ -15,13 +15,14 @@
         </form>
         <form>
           <div class="form-group">
-            <label for="taskPriority">Task name</label>
+            <label for="taskPriority">Priority</label>
             <input type="text" class="form-control" id="taskPriority" placeholder="priority">
           </div>
         </form>
+        <input type="hidden" class="form-control" id="eventId">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-default" (click)="onClose()" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-primary">Save</button>
       </div>
     </div>

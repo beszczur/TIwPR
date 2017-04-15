@@ -1,4 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
+import {Event} from '../../models/event'
 
 @Component({
   selector: 'app-event',
@@ -7,11 +8,15 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class EventComponent implements OnInit {
 
-  @Input() event: string;
+  @Input() event: Event;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  taskAddModal(){
+    (<HTMLInputElement>document.getElementById("eventId")).value = (this.event.id).toString();
   }
 
 }
