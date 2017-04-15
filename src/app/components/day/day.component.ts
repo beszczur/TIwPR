@@ -1,5 +1,4 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Event} from '../../models/event'
 
 @Component({
   selector: 'app-day',
@@ -10,7 +9,6 @@ export class DayComponent implements OnInit {
 
   @Input() day: string;
   @Input() id: number;
-  event = new Event();
 
   constructor() { }
 
@@ -20,5 +18,4 @@ export class DayComponent implements OnInit {
   addModalFunction(date: string){
     (<HTMLInputElement>document.getElementById("date")).value = date;
   }
-
 }

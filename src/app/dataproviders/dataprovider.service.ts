@@ -1,23 +1,106 @@
-import { Injectable } from '@angular/core';
-import {Http} from "@angular/http";
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import {Task} from '../models/task';
+import {Event} from '../models/event';
 
 @Injectable()
 export class DataproviderService {
   private address = '';
 
+  private plan: any[] = [
+  {
+    name: 'MONDAY',
+    date: '2017-04-24',
+    events:
+      [
+        new Event (1, 'ZSK', 0, '2017-04-24', false,
+        [
+          new Task(1, 1, 'Zadanie 1 z konstruktora', 0, 0),
+          new Task(2, 1, 'Zadanie 2 z konstruktora', 0, 1),
+        ]),
+        new Event (2, 'Angielski', 0, '2017-04-24', false,
+        [
+          new Task(3, 2, 'Zadanie 1A z konstruktora', 0, 0),
+          new Task(4, 2, 'Zadanie 2A z konstruktora', 0, 1),
+        ]),
+      ]
+  },
+  {
+    name: 'TUESDAY',
+    date: '2017-04-25',
+    events: [
+      new Event(2, 'Praca', 0, '2017-04-25', false,
+        [
+          new Task(5, 3, 'TASK 1C', 0, 0),
+          new Task(6, 3, 'TASK 2C', 1, 1),
+        ]
+      ),
+      new Event(4, 'NT4G', 0, '2017-04-25', false,
+        [
+          new Task(7, 4, 'Task 1A', 1, 0),
+          new Task(8, 4, 'Task 2A', 0, 1),
+        ]
+      ),
+    ]
+  },
+  {
+    name: 'WEDNESDAY',
+    date: '2017-04-26',
+    events: []
+  },
+  {
+    name: 'TUESDAY',
+    date: '2017-04-27',
+    events: []
+  },
+  {
+    name: 'FRIDAY',
+    date: '2017-04-28',
+    events: []
+  },
+  {
+    name: 'WEEKEND',
+    date: '2017-04-29/2017-04-30',
+    events: [
+      new Event(5, 'Trip preparation', 0, '2017-04-29', false,
+        [
+          new Task(9, 5, 'packing', 0, 0),
+          new Task(10, 5, 'bike cleaning', 0, 0),
+        ]
+      ),
+    ]
+  }
+];
+
   constructor(private _http: Http) { }
 
-  getWeekPlan() {
+  getWeekPlan(){
+    return this.plan;
+  }
+
+  addEvent(event : Event){
+    for(var i=0; i<this.plan.length; i++)
+    {
+      if(this.plan[i].date == event.date)
+      {
+        this.plan[i].events.push(event);
+        console.log(this.plan[i].events);
+      }
+    }
+
+  }
+
+  //getWeekPlan() {
     //return
     // let author = new Author(firstName, surname);
     // var headers = new Headers();
-    // headers.append("Content-Type", 'application/json');
+    // headers.append('Content-Type', 'application/json');
     // var requestoptions = new RequestOptions({
     //   method: RequestMethod.Post,
     //   url: this.address + 'searchNew/',
     //   headers: headers,
     //   body: JSON.stringify(author)
     // })
-  }
+  //}
 
 }
