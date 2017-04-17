@@ -7,8 +7,6 @@
       <small class="text-muted pull-right" style="margin-top: 5px">{{ day.date }}</small>
     </div>
     <div style="padding: 5px"></div>
-    <ul class="list-group">
-      <app-event *ngFor="let event of day.events" [event]="event"></app-event>
-    </ul>
+    <app-event *ngFor="let event of day.events" [event]="event"></app-event>
   </div>
 </div>

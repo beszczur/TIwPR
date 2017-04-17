@@ -16,7 +16,7 @@ export class EventComponent implements OnInit {
   }
 
   taskAddModal(){
-    (<HTMLInputElement>document.getElementById("eventId")).value = (this.event.id).toString();
+    (<HTMLInputElement>document.getElementById('eventId')).value = (this.event.id).toString();
   }
 
 }

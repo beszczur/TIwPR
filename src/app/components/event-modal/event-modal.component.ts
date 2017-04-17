@@ -20,17 +20,19 @@ export class EventModalComponent implements OnInit {
   }
 
   onClose(){
-    (<HTMLInputElement>document.getElementById("date")).value = "";
-    (<HTMLInputElement>document.getElementById("eventName")).value = "";
-    (<HTMLInputElement>document.getElementById("priority")).value = "";
+    (<HTMLInputElement>document.getElementById('date')).value = '';
+    (<HTMLInputElement>document.getElementById('eventName')).value = '';
+    (<HTMLInputElement>document.getElementById('position')).value = '';
+    (<HTMLInputElement>document.getElementById('isRepeatable')).checked = false;
+    this.isRepeatable = false;
   }
 
   addNewEvent(){
     var newEvent = new Event(
       22, //id
-      (<HTMLInputElement>document.getElementById("eventName")).value,
-      parseInt((<HTMLInputElement>document.getElementById("position")).value),
-      (<HTMLInputElement>document.getElementById("date")).value,
+      (<HTMLInputElement>document.getElementById('eventName')).value,
+      parseInt((<HTMLInputElement>document.getElementById('position')).value),
+      (<HTMLInputElement>document.getElementById('date')).value,
       this.isRepeatable,
       [] //tasks
     );

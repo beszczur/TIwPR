@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Task} from "../../models/task";
+import {ToasterService} from "angular2-toaster";
+import {DataproviderService} from "../../dataproviders/dataprovider.service";
 
 @Component({
   selector: 'app-task-modal',
@@ -9,15 +12,37 @@ export class TaskModalComponent implements OnInit {
 
   isRepeatable : boolean = false;
 
-  constructor() { }
+  constructor(private dataProvider: DataproviderService, private toasterService: ToasterService) { }
 
   ngOnInit() {
   }
 
   onClose(){
-    (<HTMLInputElement>document.getElementById('eventId')).value = "";
-    (<HTMLInputElement>document.getElementById('taskName')).value = "";
-    (<HTMLInputElement>document.getElementById('taskPriority')).value = "";
+    (<HTMLInputElement>document.getElementById('eventId')).value = '';
+    (<HTMLInputElement>document.getElementById('taskName')).value = '';
+    (<HTMLInputElement>document.getElementById('priority')).value = '';
+    (<HTMLInputElement>document.getElementById('isTaskRepeatable')).checked = false;
+    this.isRepeatable = false;
+  }
+
+  addNewTask(){
+    var newTask = new Task(
+      22, //id
+      parseInt((<HTMLInputElement>document.getElementById('eventId')).value),
+      (<HTMLInputElement>document.getElementById('taskName')).value,
+      0, // status
+      parseInt((<HTMLInputElement>document.getElementById('priority')).value)
+    );
+
+    if(this.dataProvider.addTask(newTask))
+    {
+      this.onClose();
+      this.toasterService.pop('success', 'New task was successfully created', '');
+    }
+    else
+    {
+      this.toasterService.pop('error', 'New task can\'t be created. Try again', '');
+    }
   }
 
 }

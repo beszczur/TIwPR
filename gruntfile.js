@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 
 
     grunt.registerTask(
-        // 'e2e', ['selenium_standalone:e2e:install', 'selenium_standalone:e2e:start', 'protractor']
+        //'e2e', ['selenium_standalone:e2e:install', 'selenium_standalone:e2e:start', 'protractor']
         'e2e', ['protractor']
 
     );

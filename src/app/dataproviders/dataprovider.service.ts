@@ -29,7 +29,7 @@ export class DataproviderService {
     name: 'TUESDAY',
     date: '2017-04-25',
     events: [
-      new Event(2, 'Praca', 0, '2017-04-25', false,
+      new Event(3, 'Praca', 0, '2017-04-25', false,
         [
           new Task(5, 3, 'TASK 1C', 0, 0),
           new Task(6, 3, 'TASK 2C', 1, 1),
@@ -46,7 +46,9 @@ export class DataproviderService {
   {
     name: 'WEDNESDAY',
     date: '2017-04-26',
-    events: []
+    events: [
+        new Event(17, 'BSI', 0, '2017-04-26', false, []),
+    ]
   },
   {
     name: 'TUESDAY',
@@ -86,6 +88,24 @@ export class DataproviderService {
         this.plan[i].events.push(event);
         console.log(this.plan[i].events);
         return true;
+      }
+    }
+    return false;
+  }
+
+  public addTask(task: Task)
+  {
+    for(var i=0; i<this.plan.length; i++)
+    {
+      var events= this.plan[i].events;
+      for(var j=0; j<events.length; j++)
+      {
+        if(events[j].id == task.eventId)
+        {
+          this.plan[i].events[j].tasks.push(task);
+          console.log(this.plan[i].events[j].tasks);
+          return true;
+        }
       }
     }
     return false;

@@ -17,6 +17,7 @@ export class WeekComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("getWeekPlan");
     this.plan = this.dataProvider.getWeekPlan();
   }
 }
