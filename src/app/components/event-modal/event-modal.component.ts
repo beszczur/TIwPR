@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Event} from '../../models/event'
 import {DataproviderService} from "../../dataproviders/dataprovider.service";
+import {ToasterService} from "angular2-toaster";
 
 @Component({
   selector: 'app-event-modal',
@@ -12,7 +13,7 @@ export class EventModalComponent implements OnInit {
 
   isRepeatable : boolean = false;
 
-  constructor(private dataProvider: DataproviderService) {
+  constructor(private dataProvider: DataproviderService, private toasterService: ToasterService) {
   }
 
   ngOnInit() {
@@ -26,15 +27,22 @@ export class EventModalComponent implements OnInit {
 
   addNewEvent(){
     var newEvent = new Event(
-      22,
+      22, //id
       (<HTMLInputElement>document.getElementById("eventName")).value,
-      0,
+      parseInt((<HTMLInputElement>document.getElementById("position")).value),
       (<HTMLInputElement>document.getElementById("date")).value,
-      false,
-      []
+      this.isRepeatable,
+      [] //tasks
     );
-    this.dataProvider.addEvent(newEvent);
-    this.onClose();
+    if(this.dataProvider.addEvent(newEvent))
+    {
+      this.onClose();
+      this.toasterService.pop('success', 'New event was successfully created', '');
+    }
+    else
+    {
+      this.toasterService.pop('error', 'New event can\'t be created. Try again', '');
+    }
   }
 
 }

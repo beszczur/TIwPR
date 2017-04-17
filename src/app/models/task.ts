@@ -11,7 +11,7 @@ export class Task {
     public eventId: number,
     public name: string,
     public status: number,
-    public position: number
+    public priority: number
   ){
 
   };

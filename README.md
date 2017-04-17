@@ -31,4 +31,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Test with protractor and cucumber
 
 `webdriver-manager start`
-`protractor protractor.conf.js`
+`grunt e2e`

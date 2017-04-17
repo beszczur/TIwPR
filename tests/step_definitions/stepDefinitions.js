@@ -31,26 +31,34 @@ module.exports = function() {
       .then(callback);
   });
 
+  this.When(/^I click on "([^"]*)" checkbox$/, function (checkboxText, callback) {
+    element(by.id(elements.checkboxes[checkboxText])).click()
+      .then(callback);
+  });
+
   this.Then(/^I should see "([^"]*)" modal$/, function (modalTitle, callback) {
     expect(element(by.id(elements.modals[modalTitle])).isPresent())
       .to.eventually.be.true.and.notify(callback);
   });
 
   this.When(/^I fill in "([^"]*)" filed with "([^"]*)"$/, function (inputFieldLabel, fieldContent, callback) {
-    element(by.id(elements.inputFields[inputFieldLabel])).clear(); // ************************** creepy ***********************************
     element(by.id(elements.inputFields[inputFieldLabel])).sendKeys(fieldContent);
     browser.driver.sleep(2000)
       .then(callback);
   });
 
-  this.When(/^I should see "([^"]*)" in "([^"]*)" filed$/, function (fileContent, inputFieldLabel, callback) {
-    expect(element(by.id(elements.inputFields[inputFieldLabel])).getAttribute('value')).to.eventually.equal(fileContent)
+  this.When(/^I should see "([^"]*)" in "([^"]*)" filed$/, function (fieldContent, inputFieldLabel, callback) {
+    expect(element(by.id(elements.inputFields[inputFieldLabel])).getAttribute('value')).to.eventually.equal(fieldContent)
       .and.notify(callback);
   });
 
-  this.Then(/^I should see popup with text "([^"]*)"$/, function (arg1, callback) {
-    // Write code here that turns the phrase above into concrete actions
+  this.Then(/^I should see popup with text "([^"]*)"$/, function (popupText, callback) {
     callback(null, 'pending');
+    // TODO:
+    //expect(element(by.className("toast-title")).isPresent())
+    //expect(element(by.cssContainingText(".toast-title", popupText)).isPresent())
+    //expect(element(by.xpath('//*[.="New event was successfully created"]')).isPresent())
+    //  .to.eventually.be.true.and.notify(callback);
   });
 
   this.Then(/^I should see "([^"]*)"$/, function (arg1, callback) {

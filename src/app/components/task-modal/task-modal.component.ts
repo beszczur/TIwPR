@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TaskModalComponent implements OnInit {
 
+  isRepeatable : boolean = false;
+
   constructor() { }
 
   ngOnInit() {

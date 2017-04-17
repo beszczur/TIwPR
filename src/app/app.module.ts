@@ -9,6 +9,7 @@ import { WeekComponent } from './components/week/week.component';
 import { EventComponent } from './components/event/event.component';
 import { EventModalComponent } from './components/event-modal/event-modal.component';
 import { TaskModalComponent } from './components/task-modal/task-modal.component';
+import {ToasterModule} from "angular2-toaster";
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { TaskModalComponent } from './components/task-modal/task-modal.component
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    ToasterModule
   ],
   providers: [],
   bootstrap: [WeekComponent]

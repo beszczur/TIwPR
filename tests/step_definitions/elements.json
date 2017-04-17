@@ -1,16 +1,38 @@
 {
   "buttons": {
-    "Add new event": "addButton"
+    "_comment": "EVENT",
+    "Add new event": "addEventButton",
+    "Save event": "saveEvent",
+
+    "_comment": "TASK",
+    "Add new task": "addTaskButton",
+    "Save task": "saveTask"
   },
 
+  "checkboxes": {
+      "_comment": "EVENT",
+
+      "_comment": "TASK",
+      "Repeatable task": "isTaskRepeatable"
+    },
+
   "modals": {
-    "Add event": "eventModal"
+    "_comment": "EVENT",
+    "Add event": "eventModal",
+
+    "_comment": "TASK",
+    "Add task": "taskModal"
   },
 
   "inputFields": {
+    "_comment": "EVENT",
     "Event name": "eventName",
-    "Priority": "priority",
-    "Date": "date"
+    "Position": "position",
+    "Date": "date",
+
+    "_comment": "TASK",
+    "Task name": "taskName",
+    "Priority": "priority"
   }
 }
 

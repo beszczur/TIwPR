@@ -78,16 +78,17 @@ export class DataproviderService {
     return this.plan;
   }
 
-  addEvent(event : Event){
+  public addEvent(event : Event){
     for(var i=0; i<this.plan.length; i++)
     {
       if(this.plan[i].date == event.date)
       {
         this.plan[i].events.push(event);
         console.log(this.plan[i].events);
+        return true;
       }
     }
-
+    return false;
   }
 
   //getWeekPlan() {

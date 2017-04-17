@@ -1,7 +1,7 @@
 <div class="child event" style="margin-bottom: 10px; border: 10px" >
   <b>{{ event.name }}</b>
   <a class="pull-right" data-toggle="modal" data-target="#taskModal" (click)="taskAddModal()">
-    <i id="addButton" style="margin-left: 5px;" class="material-icons">add</i></a>
+    <i id="addTaskButton" style="margin-left: 5px;" class="material-icons">add</i></a>
   <div style="padding:5px"> </div>
   <app-task *ngFor="let task of event.tasks" [task]="task"></app-task>
 </div>
