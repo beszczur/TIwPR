@@ -22,7 +22,7 @@ export class TaskComponent implements OnInit {
   taskEditModal(){
     (<HTMLInputElement>document.getElementById('taskName')).value = this.task.name;
     (<HTMLInputElement>document.getElementById('priority')).value = (this.task.priority).toString();
-    //(<HTMLInputElement>document.getElementById('taskId')).value = (this.task.id).toString();
+    (<HTMLInputElement>document.getElementById('taskId')).value = (this.task.id).toString();
     (<HTMLInputElement>document.getElementById('eventId')).value = (this.task.eventId).toString();
   }
 

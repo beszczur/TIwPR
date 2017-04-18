@@ -25,23 +25,48 @@ export class TaskModalComponent implements OnInit {
     this.isRepeatable = false;
   }
 
-  addNewTask(){
-    var newTask = new Task(
-      22, //id
-      parseInt((<HTMLInputElement>document.getElementById('eventId')).value),
-      (<HTMLInputElement>document.getElementById('taskName')).value,
-      0, // status
-      parseInt((<HTMLInputElement>document.getElementById('priority')).value)
-    );
-
-    if(this.dataProvider.addTask(newTask))
+  submitTask(){
+    if((<HTMLInputElement>document.getElementById('taskId')).value === '')
     {
-      this.onClose();
-      this.toasterService.pop('success', 'New task was successfully created', '');
+      console.log("ADD");
+      var newTask = new Task(
+        22, //id
+        parseInt((<HTMLInputElement>document.getElementById('eventId')).value),
+        (<HTMLInputElement>document.getElementById('taskName')).value,
+        0, // status
+        parseInt((<HTMLInputElement>document.getElementById('priority')).value)
+      );
+
+      if(this.dataProvider.addTask(newTask))
+      {
+        this.onClose();
+        this.toasterService.pop('success', 'New task was successfully created', '');
+      }
+      else
+      {
+        this.toasterService.pop('error', 'New task can\'t be created. Try again', '');
+      }
     }
     else
     {
-      this.toasterService.pop('error', 'New task can\'t be created. Try again', '');
+      console.log("EDIT");
+      var editedTask = new Task(
+        parseInt((<HTMLInputElement>document.getElementById('taskId')).value),
+        parseInt((<HTMLInputElement>document.getElementById('eventId')).value),
+        (<HTMLInputElement>document.getElementById('taskName')).value,
+        0, // status
+        parseInt((<HTMLInputElement>document.getElementById('priority')).value)
+      );
+
+      if(this.dataProvider.editTask(editedTask))
+      {
+        this.onClose();
+        this.toasterService.pop('success', 'Task was edited', '');
+      }
+      else
+      {
+        this.toasterService.pop('error', 'Task can\'t be edited. Try again', '');
+      }
     }
   }
 

@@ -100,11 +100,35 @@ export class DataproviderService {
       var events= this.plan[i].events;
       for(var j=0; j<events.length; j++)
       {
-        if(events[j].id == task.eventId)
+        if(events[j].id === task.eventId)
         {
           this.plan[i].events[j].tasks.push(task);
           console.log(this.plan[i].events[j].tasks);
           return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  public editTask(task: Task)
+  {
+    for(var i=0; i<this.plan.length; i++)
+    {
+      var events= this.plan[i].events;
+      for(var j=0; j<events.length; j++)
+      {
+        if(events[j].id === task.eventId)
+        {
+          for(var k=0; k<events[j].tasks.length; k++)
+          {
+            if(events[j].tasks[k].id === task.id)
+            {
+              this.plan[i].events[j].tasks[k]=task;
+              console.log(this.plan[i].events[j].tasks);
+              return true;
+            }
+          }
         }
       }
     }
