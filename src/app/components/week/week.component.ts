@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DataproviderService} from "../../dataproviders/dataprovider.service";
+import {DataproviderService} from '../../dataproviders/dataprovider.service';
 
 @Component({
   selector: 'app-week',
@@ -17,7 +17,7 @@ export class WeekComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("getWeekPlan");
+    console.log('getWeekPlan');
     this.plan = this.dataProvider.getWeekPlan();
   }
 }
