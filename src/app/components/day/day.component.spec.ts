@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DayComponent } from './day.component';
+import {EventComponent} from "../event/event.component";
+import {TaskComponent} from "../task/task.component";
 
 describe('DayComponent', () => {
   let component: DayComponent;
@@ -8,7 +10,11 @@ describe('DayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DayComponent ]
+      declarations: [
+        DayComponent,
+        EventComponent,
+        TaskComponent
+      ]
     })
     .compileComponents();
   }));
