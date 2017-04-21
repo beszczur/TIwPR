@@ -76,5 +76,9 @@ module.exports = function() {
     callback(null, 'pending');
   });
 
+  this.Then(/^I should see "([^"]*)" on "([^"]*)" background$/, function (arg1, arg2, callback) {
+    // Write code here that turns the phrase above into concrete actions
+    callback(null, 'pending');
+  });
 
 };
