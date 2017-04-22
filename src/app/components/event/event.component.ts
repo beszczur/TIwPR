@@ -15,7 +15,7 @@ export class EventComponent implements OnInit {
   ngOnInit() {
   }
 
-  taskAddModal(){
+  displayAddTaskModal(){
     (<HTMLInputElement>document.getElementById('eventId')).value = (this.event.id).toString();
   }
 

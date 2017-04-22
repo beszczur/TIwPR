@@ -1,4 +1,4 @@
-<div class="child" [ngClass]="{'NEW': task.status==task.NEW , 'IN_PROGRESS': task.status==task.IN_PROGRESS, 'DONE': task.status==task.DONE, 'CANCELED': task.status==task.CANCELED, 'OUT_OF_DATE': task.status==task.OUT_OF_DATE}">
+<div class="child task" [ngClass]="{'NEW': task.status==task.NEW , 'IN_PROGRESS': task.status==task.IN_PROGRESS, 'DONE': task.status==task.DONE, 'CANCELED': task.status==task.CANCELED, 'OUT_OF_DATE': task.status==task.OUT_OF_DATE}">
   <h5>
     <div class="dropdown pull-right">
       <div id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -10,7 +10,7 @@
         <li (click)="changeState(task.CANCELED)"><a href="#">CANCEL</a></li>
         <li (click)="changeState(task.OUT_OF_DATE)"><a href="#">OUT OF DATE</a></li>
         <li role="separator" class="divider"></li>
-        <li><a data-toggle="modal" data-target="#taskModal" (click)="taskEditModal()">EDIT</a></li>
+        <li><a data-toggle="modal" data-target="#taskModal" (click)="fillInTaskEditModal()">EDIT</a></li>
         <li><a href="#">DELETE</a></li>
       </ul>
     </div>

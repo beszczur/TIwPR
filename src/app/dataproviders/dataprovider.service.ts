@@ -8,7 +8,7 @@ import {Event} from '../models/event';
 export class DataproviderService {
   private address = '';
 
-  private plan: any[] = [
+  public plan: any[] = [
     new Day(
       'MONDAY',
       '2017-04-24',

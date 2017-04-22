@@ -1,10 +1,10 @@
 export class Task {
 
-  public NEW: number = 0;
-  public IN_PROGRESS: number = 1;
-  public OUT_OF_DATE: number = 2;
-  public CANCELED: number = 3;
-  public DONE: number = 4;
+  readonly NEW: number = 0;
+  readonly IN_PROGRESS: number = 1;
+  readonly OUT_OF_DATE: number = 2;
+  readonly CANCELED: number = 3;
+  readonly DONE: number = 4;
 
   constructor(
     public id: number,

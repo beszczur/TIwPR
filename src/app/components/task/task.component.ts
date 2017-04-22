@@ -17,9 +17,10 @@ export class TaskComponent implements OnInit {
 
   changeState(new_state: number){
     this.task.status = new_state;
+    // TODO: after this function backend should be informed
   }
 
-  taskEditModal(){
+  fillInTaskEditModal(){
     (<HTMLInputElement>document.getElementById('taskName')).value = this.task.name;
     (<HTMLInputElement>document.getElementById('priority')).value = (this.task.priority).toString();
     (<HTMLInputElement>document.getElementById('taskId')).value = (this.task.id).toString();
