@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {Event} from '../../models/event'
 import {DataproviderService} from "../../dataproviders/dataprovider.service";
 import {ToasterService} from "angular2-toaster";
@@ -25,6 +25,10 @@ export class EventModalComponent implements OnInit {
     (<HTMLInputElement>document.getElementById('position')).value = '';
     (<HTMLInputElement>document.getElementById('isRepeatable')).checked = false;
     this.isRepeatable = false;
+  }
+
+  public setModalDate(date: string){
+    (<HTMLInputElement>document.getElementById('date')).value = date;
   }
 
   addNewEvent(){

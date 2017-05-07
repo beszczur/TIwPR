@@ -17,6 +17,11 @@ export class TaskModalComponent implements OnInit {
   ngOnInit() {
   }
 
+  public setModalEventId(eventId: number)
+  {
+    (<HTMLInputElement>document.getElementById('eventId')).value = (eventId).toString();
+  }
+
   onClose(){
     (<HTMLInputElement>document.getElementById('eventId')).value = '';
     (<HTMLInputElement>document.getElementById('taskName')).value = '';
