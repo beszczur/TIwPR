@@ -30,6 +30,13 @@ export class TaskModalComponent implements OnInit {
     this.isRepeatable = false;
   }
 
+  setModalData(task: Task){
+    (<HTMLInputElement>document.getElementById('taskName')).value = task.name;
+    (<HTMLInputElement>document.getElementById('priority')).value = (task.priority).toString();
+    (<HTMLInputElement>document.getElementById('taskId')).value = (task.id).toString();
+    (<HTMLInputElement>document.getElementById('eventId')).value = (task.eventId).toString();
+  }
+
   submitTask(){
     if((<HTMLInputElement>document.getElementById('taskId')).value === '')
     {

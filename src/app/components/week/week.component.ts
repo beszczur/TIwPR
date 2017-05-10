@@ -19,6 +19,7 @@ export class WeekComponent implements OnInit {
   ngOnInit() {
     console.log('getWeekPlan');
     this.plan = this.dataProvider.getWeekPlan();
+    console.log("*************************#######################***********")
     //sessionStorage.setItem("plan", JSON.stringify(this.plan));
   }
 }

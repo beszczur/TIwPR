@@ -1,16 +1,18 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Task} from "../../models/task";
+import {TaskModalComponent} from "../task-modal/task-modal.component";
 
 @Component({
   selector: 'app-task',
   templateUrl: 'task.component.html',
-  styleUrls: ['task.component.scss']
+  styleUrls: ['task.component.scss'],
+  providers: [TaskModalComponent]
 })
 export class TaskComponent implements OnInit {
 
   @Input() task: Task;
 
-  constructor() { }
+  constructor(private taskModal: TaskModalComponent) { }
 
   ngOnInit() {
   }
@@ -21,10 +23,7 @@ export class TaskComponent implements OnInit {
   }
 
   fillInTaskEditModal(){
-    (<HTMLInputElement>document.getElementById('taskName')).value = this.task.name;
-    (<HTMLInputElement>document.getElementById('priority')).value = (this.task.priority).toString();
-    (<HTMLInputElement>document.getElementById('taskId')).value = (this.task.id).toString();
-    (<HTMLInputElement>document.getElementById('eventId')).value = (this.task.eventId).toString();
+    this.taskModal.setModalData(this.task);
   }
 
 }

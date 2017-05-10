@@ -64,7 +64,8 @@ export class DataproviderService {
   ),
   ];
 
-  constructor(private _http: Http) { }
+  constructor() { }
+  // private _http: Http)
 
   getWeekPlan(){
     return this.plan;
