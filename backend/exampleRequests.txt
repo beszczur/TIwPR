@@ -1,0 +1,19 @@
+# /events                   (GET, POST)
+GET:    curl http://localhost:8888/events
+POST:   curl -d '{"name": "name_form_POST", "position": 2, "date": "2017-10-20", "repeatId": 0}' http://localhost:8888/events
+
+# /events/{eid}             (GET, PUT, DELETE)
+GET:    curl http://localhost:8888/events/1
+PUT:
+DELETE:
+
+# /events/{eid}/tasks       (GET, POST)
+GET:
+POST:
+
+# /events/{eid}/tasks/{tid} (GET, PUT, DELETE, PATCH)
+GET:
+PUT:
+DELETE:
+PATCH:
+
