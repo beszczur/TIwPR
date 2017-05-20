@@ -1,3 +1,17 @@
+1.Elementem składowym zaliczenia jest projekt usługi, obejmujący:
+    * opis hierarchii zasobów,
+    * znaczenie poszczególnych operacji protokołu HTTP w odniesieniu do zasobów,
+    * opis formatów danych używanych do reprezentacji danych wejściowych i wyjściowych dla poszczególnych zasobów.
+2. Zakres funkcjonalny usługi jest dowolny. Usługa powinna mieć jednak nietrywialny poziom złożoności. Wśród udostępnianych zasobów powinny się znaleźć (co najmniej po 1 sztuce):
+    * proste zasoby oferujące pełen zakres operacji CRUD,
+    * zasoby-kolekcje będące reprezentacją zbiorów innych zasobów i stosujące stronicowanie w swoich reprezentacjach,
+    * zasoby-kontrolery umożliwiające atomowe wykonanie aktualizacji kilku innych zasobów,
+    * zasoby przyjmujące zlecenia w trybie POST once exactly, eliminujące wielokrotne wysyłanie tych samych danych.
+3. Wykonywanie aktualizacji zasobów (PUT) powinno być wykonywane w trybie weryfikacji, wykluczającej niesygnalizowane nadpisywanie współbieżnie nanoszonych zmian przez różnych klientów (lost update problem).
+4. Implementacja powinna wykorzystywać dowolnie wybrane środowisko programistyczne (framework) wspierające budowę usług sieciowych REST.
+5. W ramach projektu należy również zaimplementować przykładowego klienta usługi. Klient może być aplikacją webową lub samodzielną aplikacją.
+
+
 # /events                   (GET, POST)
 GET:    curl http://localhost:8888/events
 POST:   curl -d '{"name": "name_form_POST", "position": 2, "date": "2017-10-20", "repeatId": 0}' http://localhost:8888/events
