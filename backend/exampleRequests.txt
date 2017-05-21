@@ -19,15 +19,14 @@ POST:   curl -d '{"name": "name_form_POST", "position": 2, "date": "2017-10-20",
 # /events/{eid}             (GET, PUT, DELETE)
 GET:    curl http://localhost:8888/events/1
 PUT:
-DELETE:
+DELETE: curl -X DELETE http://localhost:8888/events/14
 
 # /events/{eid}/tasks       (GET, POST)
-GET:
-POST:
+GET:    curl http://localhost:8888/events/1/tasks
+POST:   curl -d '{"name": "prepare soup", "eventId": 13, "status": 0, "priority": 0, "repeatId": 0}' http://localhost:8888/events/13/tasks
 
 # /events/{eid}/tasks/{tid} (GET, PUT, DELETE, PATCH)
-GET:
+GET:    curl http://localhost:8888/events/1/tasks/1
 PUT:
-DELETE:
+DELETE: curl -X DELETE http://localhost:8888/events/1/tasks/1
 PATCH:
-

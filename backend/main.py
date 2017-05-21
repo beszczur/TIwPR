@@ -2,7 +2,6 @@ import json
 import tornado.ioloop
 import tornado.web
 import sqlite3 as sqlite
-from tornado.escape import json_encode
 
 
 # /events                   (GET, POST)
@@ -23,12 +22,13 @@ class Event:
 
 
 class Task:
-    def __init__(self, id, eventId, name, status, priority):
+    def __init__(self, id, eventId, name, priority, status, repeatId):
         self.id = id
         self.eventId = eventId
         self.name = name
-        self.status = status
         self.priority = priority
+        self.status = status
+        self.repeatOptions = repeatId
 
 
 ########################################### DATABASE #############################################
@@ -50,6 +50,12 @@ def addEvent(name, position, date, repeatId):
     return c.lastrowid
 
 
+def addTask(eventId, name, priority, status, repeatId):
+    c.execute('INSERT INTO tasks VALUES (NULL,?,?,?,?,?)', (eventId, name, priority, status, repeatId))
+    conn.commit()
+    return c.lastrowid
+
+
 def eventKeysExists(data):
     keys = ['name', 'position', 'date', 'repeatId']
     for key in keys:
@@ -58,8 +64,25 @@ def eventKeysExists(data):
     return True
 
 
-def isEventExist(id):
-    c.execute('SELECT count(*) from events where id=' + id)
+def taskKeysExists(data):
+    keys = ['eventId', 'name', 'priority', 'status', 'repeatId']
+    for key in keys:
+        if not key in data:
+            return False
+    return True
+
+
+def isEventExist(eid):
+    c.execute('SELECT count(*) from events where id=' + eid)
+    exists = c.fetchone()['count(*)']
+    if exists == 0:
+        return False
+    else:
+        return True
+
+
+def isTaskExist(tid):
+    c.execute('SELECT count(*) from tasks where id=' + tid)
     exists = c.fetchone()['count(*)']
     if exists == 0:
         return False
@@ -107,30 +130,81 @@ class EventsCollectionHandler(tornado.web.RequestHandler):
 
 
 class EventHandler(tornado.web.RequestHandler):
-    def get(self, id):  # DONE
-        c.execute('SELECT * from events where id=' + id)
+    def get(self, eid):  # DONE
+        c.execute('SELECT * from events where id=' + eid)
         result_set = c.fetchall()
         self.write(json.dumps(result_set))
         # Should I return 404 if id doesn't exist in database ?
 
-    def put(self, id):
+    def put(self, eid):
         print "PUT"
 
-    def delete(self, id): # DONE
-        if isEventExist(id):
-            c.execute('DELETE FROM events WHERE id=?', (id,))
+    def delete(self, eid):  # DONE
+        if isEventExist(eid):
+            c.execute('DELETE FROM events WHERE id=?', (eid,))
             conn.commit()
             # Task which refers to this event should also be deleted
-            self.write({'DELETED': '#which code here ? 200 ?'})
+            self.write({'DELETED EVENT': '#which code here ? 200 ?'})
         else:
-            self.write({'Event dosen\'t exist': id})
+            self.write({'Event doesn\'t exist': eid})
+
+
+class TaskHandler(tornado.web.RequestHandler):
+    def get(self, eid, tid):  # DONE
+        if tid:
+            c.execute('SELECT * from tasks where eventId=' + eid + ' and id=' + tid)
+            result_set = c.fetchall()
+            self.write(json.dumps(result_set))
+        else:  # DONE
+            if isEventExist(eid):
+                c.execute('SELECT * from tasks where eventId=' + eid)
+                result_set = c.fetchall()
+                self.write(json.dumps(result_set))
+            else:
+                self.write({'Event doesn\'t exist': eid})
+
+    def post(self, eid, tid):  # DONE
+        if tid:
+            print "METHOD NOT ALLOWED"
+            self.write({'Method': 'not allowed'})
+        else:
+            data = json.loads(self.request.body.decode('utf-8'))
+            if taskKeysExists(data):
+                if isEventExist(`data['eventId']`) and `data['eventId']` == eid:
+                    # Should it be 201 - Created ?
+                    self.write({'Task added, id:': addTask(data['eventId'], data['name'], data['priority'],
+                                                           data['status'], data['repeatId'])})
+                else:
+                    print "Event Id doesn't exist"
+                    self.write({'Incorrect Event Id': 'in your request'})
+            else:
+                print "Missing data in request"
+                self.write({'Missing data': 'in your request'})
+
+    def delete(self, eid, tid):  # DONE
+        if tid:
+            if isTaskExist(tid):
+                c.execute('DELETE FROM tasks WHERE id=?', (tid,))
+                conn.commit()
+                self.write({'DELETED TASK': '#which code here ? 200 ?'})
+            else:
+                self.write({'Task doesn\'t exist': tid})
+        else:
+            self.write({'Method': 'not allowed'})
+
+    def patch(self, eid, tid):
+        print "PATCH"
+
+    def put(self, eid, tid):
+        print "PUT"
 
 
 if __name__ == "__main__":
     application = tornado.web.Application([
-        ("/", MainHandler),
-        ("/events", EventsCollectionHandler),  # DONE
-        ("/events/([0-9]+)", EventHandler)
+        (r"/", MainHandler),
+        (r"/events", EventsCollectionHandler),
+        (r"/events/(?P<eid>[0-9]+)", EventHandler),
+        (r"/events/(?P<eid>[0-9]+)/tasks/?(?P<tid>[0-9]+)?", TaskHandler)
     ])
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
