@@ -3,6 +3,13 @@ import tornado.ioloop
 import tornado.web
 import sqlite3 as sqlite
 
+# TO-DO:
+# 1. Etags in POST requests
+# 2. CODES (200, 201, 302)
+# 3. Date validator, input validator
+# 4. Kasowanie taskow wraz z eventem
+# 5. Once exacly
+# 6. Exampe usage bash
 
 # /events                   (GET, POST)
 # /events/{eid}             (GET, PUT, DELETE)
@@ -11,6 +18,12 @@ import sqlite3 as sqlite
 
 # from tornado import httpserver
 # from tornado import gen
+
+statuses = {
+    'OK': 200,
+    'Created': 201
+}
+
 
 class Event:
     def __init__(self, id, name, position, date, repeatId):
@@ -46,6 +59,13 @@ c = conn.cursor()
 
 def addEvent(name, position, date, repeatId):
     c.execute('INSERT INTO events VALUES (NULL,?,?,?,?)', (name, position, date, repeatId))
+    conn.commit()
+    return c.lastrowid
+
+
+def updateEvent(eid, name, position, date, repeatId):
+    c.execute('UPDATE events SET name=?, position=?, date=?, repeatId=? WHERE id=?',
+              (name, position, date, repeatId, eid))
     conn.commit()
     return c.lastrowid
 
@@ -117,13 +137,16 @@ class EventsCollectionHandler(tornado.web.RequestHandler):
     def get(self):  # DONE
         c.execute('SELECT * from events')
         result_set = c.fetchall()
+        self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(result_set))
 
     def post(self):  # DONE
         data = json.loads(self.request.body.decode('utf-8'))
         if eventKeysExists(data):
-            # Should it be 201 - Created ?
-            self.write({'Event added, id:': addEvent(data['name'], data['position'], data['date'], data['repeatId'])})
+            eid = addEvent(data['name'], data['position'], data['date'], data['repeatId'])
+            self.write({'Event added, id:': eid})
+            self.set_status(statuses['Created'])
+            self.set_header('location', '/events/' + `eid`)
         else:
             print "Missing data in request"
             self.write({'Missing data': 'in your request'})
@@ -134,10 +157,24 @@ class EventHandler(tornado.web.RequestHandler):
         c.execute('SELECT * from events where id=' + eid)
         result_set = c.fetchall()
         self.write(json.dumps(result_set))
+        self.set_etag_header()
         # Should I return 404 if id doesn't exist in database ?
 
-    def put(self, eid):
-        print "PUT"
+    def put(self, eid):  # DONE
+        if self.check_etag_header():
+            self.set_status(304)
+            return
+        data = json.loads(self.request.body.decode('utf-8'))
+        if isEventExist(eid):
+            if eventKeysExists(data):
+                updateEvent(eid, data['name'], data['position'], data['date'], data['repeatId'])
+                self.write({'Event updated, id:': eid})
+            else:
+                print "Missing data in request"
+                self.write({'Missing data': 'in your request'})
+        else:
+            print "Event doesn\'t exist."
+            self.write({'Event doesn\'t exist': eid})
 
     def delete(self, eid):  # DONE
         if isEventExist(eid):
@@ -171,9 +208,11 @@ class TaskHandler(tornado.web.RequestHandler):
             data = json.loads(self.request.body.decode('utf-8'))
             if taskKeysExists(data):
                 if isEventExist(`data['eventId']`) and `data['eventId']` == eid:
-                    # Should it be 201 - Created ?
-                    self.write({'Task added, id:': addTask(data['eventId'], data['name'], data['priority'],
-                                                           data['status'], data['repeatId'])})
+                    tid = addTask(data['eventId'], data['name'], data['priority'],
+                                  data['status'], data['repeatId'])
+                    self.write({'Task added, id:': tid})
+                    self.set_status(statuses['Created'])
+                    self.set_header('location', '/events/' + `data['eventId']` + '/tasks/' + `tid`)
                 else:
                     print "Event Id doesn't exist"
                     self.write({'Incorrect Event Id': 'in your request'})
@@ -190,7 +229,7 @@ class TaskHandler(tornado.web.RequestHandler):
             else:
                 self.write({'Task doesn\'t exist': tid})
         else:
-            self.write({'Method': 'not allowed'})
+            raise tornado.web.HTTPError(405)
 
     def patch(self, eid, tid):
         print "PATCH"
