@@ -2,6 +2,7 @@ import json
 import tornado.ioloop
 import tornado.web
 import sqlite3 as sqlite
+import datetime
 
 # TO-DO:
 # 1. Etags in POST requests
@@ -70,6 +71,12 @@ def updateEvent(eid, name, position, date, repeatId):
     return c.lastrowid
 
 
+def deleteEvent(eid):
+    # Task which refers to this event should also be deleted
+    c.execute('DELETE FROM events WHERE id=?', (eid,))
+    conn.commit()
+
+
 def addTask(eventId, name, priority, status, repeatId):
     c.execute('INSERT INTO tasks VALUES (NULL,?,?,?,?,?)', (eventId, name, priority, status, repeatId))
     conn.commit()
@@ -97,8 +104,7 @@ def isEventExist(eid):
     exists = c.fetchone()['count(*)']
     if exists == 0:
         return False
-    else:
-        return True
+    return True
 
 
 def isTaskExist(tid):
@@ -106,8 +112,28 @@ def isTaskExist(tid):
     exists = c.fetchone()['count(*)']
     if exists == 0:
         return False
-    else:
+    return True
+
+####################################### VALIDATOR #################################################
+
+def validateDate(date_text):
+    try:
+        datetime.datetime.strptime(date_text, '%Y-%m-%d')
         return True
+    except ValueError:
+        #raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+        return False
+
+def validateInt(value):
+    if isinstance( value, int ):
+        return True
+    return False
+
+def validateEvent(data):
+    print eventKeysExists(data), validateDate(data['date']), validateInt(data['position']), validateInt(data['repeatId'])
+    if eventKeysExists(data) and validateDate(data['date']) and validateInt(data['position']) and validateInt(data['repeatId']):
+        return True
+    return False
 
 
 ######################################## REST ####################################################
@@ -142,7 +168,7 @@ class EventsCollectionHandler(tornado.web.RequestHandler):
 
     def post(self):  # DONE
         data = json.loads(self.request.body.decode('utf-8'))
-        if eventKeysExists(data):
+        if validateEvent(data):
             eid = addEvent(data['name'], data['position'], data['date'], data['repeatId'])
             self.write({'Event added, id:': eid})
             self.set_status(statuses['Created'])
@@ -178,9 +204,7 @@ class EventHandler(tornado.web.RequestHandler):
 
     def delete(self, eid):  # DONE
         if isEventExist(eid):
-            c.execute('DELETE FROM events WHERE id=?', (eid,))
-            conn.commit()
-            # Task which refers to this event should also be deleted
+            deleteEvent(eid)
             self.write({'DELETED EVENT': '#which code here ? 200 ?'})
         else:
             self.write({'Event doesn\'t exist': eid})
