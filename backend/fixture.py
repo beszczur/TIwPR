@@ -33,7 +33,7 @@ def createDatabase():
             priority number,\
             status number,\
             repeatId number,\
-            FOREIGN KEY (repeatId) REFERENCES repeatOptions(id)))')
+            FOREIGN KEY (repeatId) REFERENCES repeatOptions(id))')
         print('Successfully created table \'tasks\'')
 
     conn.commit()
