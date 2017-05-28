@@ -22,7 +22,6 @@ def validateDate(date_text):
         datetime.datetime.strptime(date_text, '%Y-%m-%d')
         return True
     except ValueError:
-        # raise ValueError("Incorrectdate data format, should be YYYY-MM-DD")
         return False
 
 
@@ -33,8 +32,6 @@ def validateInt(value):
 
 
 def validateEvent(data):
-    print eventKeysExists(data), validateDate(data['date']), validateInt(data['position']), validateInt(
-        data['repeatId'])
     if eventKeysExists(data) and validateDate(data['date']) and validateInt(data['position']) and validateInt(
             data['repeatId']):
         return True
