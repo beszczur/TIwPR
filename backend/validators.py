@@ -43,3 +43,9 @@ def validateTask(data):
             data['repeatId']):
         return True
     return False
+
+
+def ifIdFiledExists(data):
+    if not 'id' in data:
+        return False
+    return True
