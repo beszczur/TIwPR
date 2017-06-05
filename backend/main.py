@@ -74,7 +74,7 @@ class EventHandler(tornado.web.RequestHandler):
                 return
             data = json.loads(self.request.body.decode('utf-8'))
             if db.isEventExist(eid):
-                if validateEvent(data) and ifIdFiledExists(data):
+                if validateEvent(data) and ifIdFiledExists(data) and `data['id']` == eid:
                     db.updateEvent(eid, data['name'], data['position'], data['date'], data['repeatId'])
                     self.write({'Event updated, id:': eid})
                 else:
