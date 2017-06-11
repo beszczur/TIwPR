@@ -6,7 +6,7 @@ import database as db
 from validators import validateEvent, validateTask, ifIdFiledExists
 
 # TO-DO:
-# +   1. Etags in PUT & PATCH requests
+# ++  1. Etags in PUT & PATCH (& DELETE ?) requests
 # +++ 2. CODES (200, 201, 302)
 # +++ 3. Date validator, input validator
 # 4. Kasowanie taskow wraz z eventem
@@ -161,11 +161,26 @@ class TaskHandler(tornado.web.RequestHandler):
 
     def patch(self, eid, tid):
         try:
-            # if self.request.headers.get('If-Match') != computeEtag(json.dumps(db.getEventById(eid))):
-            #     self.write({'Exception': 'Etag doesn\'t match'})
-            #     self.set_status(statuses['PreconditionFailed'])
-            #     return
-            print "PATCH"
+            if tid:
+                data = json.loads(self.request.body.decode('utf-8'))
+                if db.isEventExist(eid):
+                    if db.isTaskExist(tid) and 'status' in data:
+                        if self.request.headers.get('If-Match') != computeEtag(
+                                json.dumps(db.getTaskByEidAndTid(eid, tid))):
+                            self.write({'Exception': 'Etag doesn\'t match'})
+                            self.set_status(statuses['PreconditionFailed'])
+                            return
+                        db.updateTaskStatus(tid, data['status'])
+                        self.write({'Task status updated, id:': tid})
+                        self.set_status(statuses['OK'])
+                    else:
+                        self.write({'Exception': 'Missing data in your request'})
+                        self.set_status(statuses['BadRequest'])
+                else:
+                    self.write({'Exception': 'Incorrect Event Id in your request (Event doesn\'t exist)'})
+                    self.set_status(statuses['NotFound'])
+            else:
+                raise tornado.web.HTTPError(statuses['MethodNotAllowed'])
         except ValueError:
             self.write({'Exception': 'Invalid JSON'})
             self.set_status(statuses['BadRequest'])
