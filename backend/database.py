@@ -58,6 +58,13 @@ def addTask(eventId, name, priority, status, repeatId):
     return c.lastrowid
 
 
+def updateTask(taskId, eventId, name, priority, status, repeatId):
+    c.execute('UPDATE tasks SET eventId=?, name=?, priority=?, status=?, repeatId=? WHERE id=?',
+              (eventId, name, priority, status, repeatId, taskId))
+    conn.commit()
+    return c.lastrowid
+
+
 def deleteTaskById(tid):
     c.execute('DELETE FROM tasks WHERE id=?', (tid,))
     conn.commit()

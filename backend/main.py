@@ -1,14 +1,14 @@
 import json
+import hashlib
 import tornado.ioloop
 import tornado.web
 import database as db
 from validators import validateEvent, validateTask, ifIdFiledExists
 
-
 # TO-DO:
-# 1. Etags in POST requests
-# 2. CODES (200, 201, 302)
-# ++ 3. Date validator, input validator
+# +   1. Etags in PUT & PATCH requests
+# +++ 2. CODES (200, 201, 302)
+# +++ 3. Date validator, input validator
 # 4. Kasowanie taskow wraz z eventem
 # 5. Once exacly
 # 6. Exampe usage bash
@@ -18,16 +18,21 @@ from validators import validateEvent, validateTask, ifIdFiledExists
 # /events/{eid}/tasks       (GET, POST)
 # /events/{eid}/tasks/{tid} (GET, PUT, DELETE, PATCH)
 
-# from tornado import httpserver
-# from tornado import gen
-
 statuses = {
     'OK': 200,
     'Created': 201,
     'BadRequest': 400,
     'NotFound': 404,
-    'MethodNotAllowed': 405
+    'MethodNotAllowed': 405,
+    'PreconditionFailed': 412
 }
+
+
+def computeEtag(data):
+    hasher = hashlib.sha1()
+    for part in data:
+        hasher.update(part)
+    return '"%s"' % hasher.hexdigest()
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -49,7 +54,6 @@ class EventsCollectionHandler(tornado.web.RequestHandler):
                 self.set_header('location', '/events/' + `eid`)
                 self.set_status(statuses['Created'])
             else:
-                print "Missing or incorrect data in request"
                 self.write({'Exception': 'Missing or incorrect data in your request'})
                 self.set_status(statuses['BadRequest'])
         except ValueError:
@@ -69,14 +73,16 @@ class EventHandler(tornado.web.RequestHandler):
 
     def put(self, eid):  # DONE
         try:
-            if self.check_etag_header():
-                self.set_status(304)
-                return
             data = json.loads(self.request.body.decode('utf-8'))
             if db.isEventExist(eid):
                 if validateEvent(data) and ifIdFiledExists(data) and `data['id']` == eid:
+                    if self.request.headers.get('If-Match') != computeEtag(json.dumps(db.getEventById(eid))):
+                        self.write({'Exception': 'Etag doesn\'t match'})
+                        self.set_status(statuses['PreconditionFailed'])
+                        return
                     db.updateEvent(eid, data['name'], data['position'], data['date'], data['repeatId'])
                     self.write({'Event updated, id:': eid})
+                    self.set_status(statuses['OK'])
                 else:
                     self.write({'Exception': 'Missing or incorrect data in your request'})
                     self.set_status(statuses['BadRequest'])
@@ -91,6 +97,7 @@ class EventHandler(tornado.web.RequestHandler):
         if db.isEventExist(eid):
             db.deleteEventById(eid)
             self.write({'DELETED EVENT': eid})
+            self.set_status(statuses['OK'])
         else:
             self.write({'Exception': 'Event doesn\'t exist , id: ' + `eid`})
             self.set_status(statuses['NotFound'])
@@ -99,10 +106,20 @@ class EventHandler(tornado.web.RequestHandler):
 class TaskHandler(tornado.web.RequestHandler):
     def get(self, eid, tid):  # DONE
         if tid:
-            self.write(json.dumps(db.getTaskByEidAndTid(eid, tid)))
+            if db.isEventExist(eid):
+                if db.isTaskExist(tid):
+                    self.write(json.dumps(db.getTaskByEidAndTid(eid, tid)))
+                    self.set_status(statuses['OK'])
+                else:
+                    self.write({'Exception': 'Incorrect Task Id in your request (Task doesn\'t exist)'})
+                    self.set_status(statuses['NotFound'])
+            else:
+                self.write({'Exception': 'Incorrect Event Id in your request (Event doesn\'t exist)'})
+                self.set_status(statuses['NotFound'])
         else:  # DONE
             if db.isEventExist(eid):
                 self.write(json.dumps(db.getTasksByEid(eid)))
+                self.set_status(statuses['OK'])
             else:
                 self.write({'Exception': 'Event doesn\'t exist , id: ' + `eid`})
                 self.set_status(statuses['NotFound'])
@@ -121,11 +138,9 @@ class TaskHandler(tornado.web.RequestHandler):
                         self.set_header('location', '/events/' + `data['eventId']` + '/tasks/' + `tid`)
                         self.set_status(statuses['Created'])
                     else:
-                        print "Event Id doesn't exist"
                         self.write({'Exception': 'Incorrect Event Id in your request'})
                         self.set_status(statuses['NotFound'])
                 else:
-                    print "Missing or incorrect data in request"
                     self.write({'Exception': 'Missing or incorrect data in your request'})
                     self.set_status(statuses['BadRequest'])
         except ValueError:
@@ -137,6 +152,7 @@ class TaskHandler(tornado.web.RequestHandler):
             if db.isTaskExist(tid):
                 db.deleteTaskById(tid)
                 self.write({'DELETED TASK': tid})
+                self.set_status(statuses['OK'])
             else:
                 self.write({'Exception:': 'Task doesn\'t exist' + `tid`})
                 self.set_status(statuses['NotFound'])
@@ -145,6 +161,10 @@ class TaskHandler(tornado.web.RequestHandler):
 
     def patch(self, eid, tid):
         try:
+            # if self.request.headers.get('If-Match') != computeEtag(json.dumps(db.getEventById(eid))):
+            #     self.write({'Exception': 'Etag doesn\'t match'})
+            #     self.set_status(statuses['PreconditionFailed'])
+            #     return
             print "PATCH"
         except ValueError:
             self.write({'Exception': 'Invalid JSON'})
@@ -152,7 +172,31 @@ class TaskHandler(tornado.web.RequestHandler):
 
     def put(self, eid, tid):
         try:
-            print "PUT"
+            if not tid:
+                raise tornado.web.HTTPError(statuses['MethodNotAllowed'])
+            else:
+                data = json.loads(self.request.body.decode('utf-8'))
+                if validateTask(data) and ifIdFiledExists(data):
+                    if db.isEventExist(`data['eventId']`)and `data['eventId']` == eid:
+                        if db.isTaskExist(`data['id']`) and `data['id']` == tid:
+                                if self.request.headers.get('If-Match') != computeEtag(
+                                        json.dumps(db.getTaskByEidAndTid(eid, tid))):
+                                    self.write({'Exception': 'Etag doesn\'t match'})
+                                    self.set_status(statuses['PreconditionFailed'])
+                                    return
+                                db.updateTask(data['id'], data['eventId'], data['name'], data['priority'],
+                                              data['status'], data['repeatId'])
+                                self.write({'Task updated, id:': tid})
+                                self.set_status(statuses['OK'])
+                        else:
+                            self.write({'Exception': 'Incorrect Task Id in your request (Task doesn\'t exist)'})
+                            self.set_status(statuses['NotFound'])
+                    else:
+                        self.write({'Exception': 'Incorrect Event Id in your request'})
+                        self.set_status(statuses['NotFound'])
+                else:
+                    self.write({'Exception': 'Missing or incorrect data in your request'})
+                    self.set_status(statuses['BadRequest'])
         except ValueError:
             self.write({'Exception': 'Invalid JSON'})
             self.set_status(statuses['BadRequest'])

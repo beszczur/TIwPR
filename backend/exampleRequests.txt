@@ -18,7 +18,7 @@ POST:   curl -d '{"name": "name_form_POST", "position": 2, "date": "2017-10-20",
 
 # /events/{eid}             (GET, PUT, DELETE)
 GET:    curl http://localhost:8888/events/1
-PUT:    curl -X PUT -d '{"name": "BARDZO POWAŻNA NAZWA EVENTU", "position": 2, "date": "2017-10-20", "repeatId": 0}' http://localhost:8888/events/13
+PUT:    curl -X PUT --header 'If-Match: "XXX"' -d '{"id": 13, "name": "BARDZO POWAŻNA NAZWA EVENTU", "position": 2, "date": "2017-10-20", "repeatId": 0}' http://localhost:8888/events/13
 DELETE: curl -X DELETE http://localhost:8888/events/14
 
 # /events/{eid}/tasks       (GET, POST)
@@ -27,6 +27,6 @@ POST:   curl -d '{"name": "prepare soup", "eventId": 13, "status": 0, "priority"
 
 # /events/{eid}/tasks/{tid} (GET, PUT, DELETE, PATCH)
 GET:    curl http://localhost:8888/events/1/tasks/1
-PUT:
+PUT:    curl -X PUT --header 'If-Match: "XXX"' -d '{"id": 1, "name": "prepare yogurt", "eventId": 1, "status": 0, "priority": 0, "repeatId": 0}' http://localhost:8888/events/1/tasks/1
 DELETE: curl -X DELETE http://localhost:8888/events/1/tasks/1
-PATCH:
+PATCH:  curl -X PATCH --header 'If-Match: "XXX"' -d '{"id": 1, "status": 0}' http://localhost:8888/events/8/tasks/2
