@@ -42,8 +42,11 @@ class MainHandler(tornado.web.RequestHandler):
 
 class EventsCollectionHandler(tornado.web.RequestHandler):
     def get(self):  # DONE
-        self.write(json.dumps(db.getEvents()))
+        pageSize=self.get_argument("pageSize", db.defaultPageSize)
+        page=self.get_argument("page",0)
+        self.write(json.dumps(db.getEvents(pageSize, page)))
         self.set_header('Content-Type', 'application/json')
+        self.set_status(statuses['OK'])
 
     def post(self):  # DONE
         try:
@@ -118,7 +121,10 @@ class TaskHandler(tornado.web.RequestHandler):
                 self.set_status(statuses['NotFound'])
         else:  # DONE
             if db.isEventExist(eid):
-                self.write(json.dumps(db.getTasksByEid(eid)))
+                pageSize = self.get_argument("pageSize", db.defaultPageSize)
+                page = self.get_argument("page", 0)
+                self.write(json.dumps(db.getTasksByEid(eid, pageSize, page)))
+                self.set_header('Content-Type', 'application/json')
                 self.set_status(statuses['OK'])
             else:
                 self.write({'Exception': 'Event doesn\'t exist , id: ' + `eid`})

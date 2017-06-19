@@ -13,6 +13,8 @@ conn.row_factory = dict_factory
 c = conn.cursor()
 
 
+defaultPageSize = 5
+
 ####################################### EVENT ########################################################
 def addEvent(name, position, date, repeatId):
     c.execute('INSERT INTO events VALUES (NULL,?,?,?,?)', (name, position, date, repeatId))
@@ -38,8 +40,8 @@ def getEventById(eid):
     return c.fetchall()
 
 
-def getEvents():
-    c.execute('SELECT * FROM events')
+def getEvents(chunkSize=defaultPageSize, pageNumber=0):
+    c.execute('SELECT * FROM events LIMIT ? OFFSET ?', (chunkSize, int(pageNumber)*int(chunkSize)))
     return c.fetchall()
 
 
@@ -76,8 +78,8 @@ def deleteTaskById(tid):
     conn.commit()
 
 
-def getTasksByEid(eid):
-    c.execute('SELECT * FROM tasks WHERE eventId=' + eid)
+def getTasksByEid(eid, chunkSize=defaultPageSize, pageNumber=0):
+    c.execute('SELECT * FROM tasks WHERE eventId=? LIMIT ? OFFSET ?', (eid, chunkSize, int(pageNumber)*int(chunkSize)))
     return c.fetchall()
 
 
