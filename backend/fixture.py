@@ -28,7 +28,7 @@ def createDatabase():
         print('Creating table \'tasks\'')
         c.execute('CREATE TABLE tasks (\
             id INTEGER PRIMARY KEY AUTOINCREMENT,\
-            eventId number, \
+            eventId number REFERENCES events(id) ON DELETE CASCADE, \
             name text,\
             priority number,\
             status number,\

@@ -31,6 +31,7 @@ def updateEvent(eid, name, position, date, repeatId):
 
 def deleteEventById(eid):
     # Task which refers to this event should also be deleted
+    c.execute('PRAGMA foreign_keys = ON')
     c.execute('DELETE FROM events WHERE id=?', (eid,))
     conn.commit()
 

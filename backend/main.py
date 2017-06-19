@@ -9,7 +9,7 @@ from validators import validateEvent, validateTask, ifIdFiledExists
 # ++  1. Etags in PUT & PATCH (& DELETE ?) requests
 # +++ 2. CODES (200, 201, 302)
 # +++ 3. Date validator, input validator
-# 4. Kasowanie taskow wraz z eventem
+# +++ 4. Kasowanie taskow wraz z eventem (ON DELETE CASCADE)
 # 5. Once exacly
 # 6. Exampe usage bash
 
