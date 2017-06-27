@@ -17,6 +17,7 @@ from validators import validateEvent, validateTask, ifIdFiledExists
 # /events/{eid}             (GET, PUT, DELETE)
 # /events/{eid}/tasks       (GET, POST)
 # /events/{eid}/tasks/{tid} (GET, PUT, DELETE, PATCH)
+# /tokens                   (POST)
 
 statuses = {
     'OK': 200,
@@ -40,10 +41,24 @@ class MainHandler(tornado.web.RequestHandler):
         self.write({'TO DO': 'LIST'})
 
 
+class TokensHandler(tornado.web.RequestHandler):
+    def post(self):  # DONE
+            token = self.request.headers.get('token')
+            if token:
+                try:
+                    tokenId = db.addToken(token)
+                    self.write({'Token added, id:': tokenId})
+                    self.set_status(statuses['Created'])
+                except db.sqlite.IntegrityError:
+                    self.write({'Token was existed': ':('})
+            else:
+                self.write({'Missing token': 'in your request'})
+
+
 class EventsCollectionHandler(tornado.web.RequestHandler):
     def get(self):  # DONE
-        pageSize=self.get_argument("pageSize", db.defaultPageSize)
-        page=self.get_argument("page",0)
+        pageSize = self.get_argument('pageSize', db.defaultPageSize)
+        page = self.get_argument('page', 0)
         self.write(json.dumps(db.getEvents(pageSize, page)))
         self.set_header('Content-Type', 'application/json')
         self.set_status(statuses['OK'])
@@ -121,8 +136,8 @@ class TaskHandler(tornado.web.RequestHandler):
                 self.set_status(statuses['NotFound'])
         else:  # DONE
             if db.isEventExist(eid):
-                pageSize = self.get_argument("pageSize", db.defaultPageSize)
-                page = self.get_argument("page", 0)
+                pageSize = self.get_argument('pageSize', db.defaultPageSize)
+                page = self.get_argument('page', 0)
                 self.write(json.dumps(db.getTasksByEid(eid, pageSize, page)))
                 self.set_header('Content-Type', 'application/json')
                 self.set_status(statuses['OK'])
@@ -198,17 +213,17 @@ class TaskHandler(tornado.web.RequestHandler):
             else:
                 data = json.loads(self.request.body.decode('utf-8'))
                 if validateTask(data) and ifIdFiledExists(data):
-                    if db.isEventExist(`data['eventId']`)and `data['eventId']` == eid:
+                    if db.isEventExist(`data['eventId']`) and `data['eventId']` == eid:
                         if db.isTaskExist(`data['id']`) and `data['id']` == tid:
-                                if self.request.headers.get('If-Match') != computeEtag(
-                                        json.dumps(db.getTaskByEidAndTid(eid, tid))):
-                                    self.write({'Exception': 'Etag doesn\'t match'})
-                                    self.set_status(statuses['PreconditionFailed'])
-                                    return
-                                db.updateTask(data['id'], data['eventId'], data['name'], data['priority'],
-                                              data['status'], data['repeatId'])
-                                self.write({'Task updated, id:': tid})
-                                self.set_status(statuses['OK'])
+                            if self.request.headers.get('If-Match') != computeEtag(
+                                    json.dumps(db.getTaskByEidAndTid(eid, tid))):
+                                self.write({'Exception': 'Etag doesn\'t match'})
+                                self.set_status(statuses['PreconditionFailed'])
+                                return
+                            db.updateTask(data['id'], data['eventId'], data['name'], data['priority'],
+                                          data['status'], data['repeatId'])
+                            self.write({'Task updated, id:': tid})
+                            self.set_status(statuses['OK'])
                         else:
                             self.write({'Exception': 'Incorrect Task Id in your request (Task doesn\'t exist)'})
                             self.set_status(statuses['NotFound'])
@@ -226,6 +241,7 @@ class TaskHandler(tornado.web.RequestHandler):
 if __name__ == "__main__":
     application = tornado.web.Application([
         (r"/", MainHandler),
+        (r"/tokens", TokensHandler),
         (r"/events", EventsCollectionHandler),
         (r"/events/(?P<eid>[0-9]+)", EventHandler),
         (r"/events/(?P<eid>[0-9]+)/tasks/?(?P<tid>[0-9]+)?", TaskHandler)

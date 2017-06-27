@@ -95,3 +95,20 @@ def isTaskExist(tid):
     if exists == 0:
         return False
     return True
+
+####################################### TOKEN ########################################################
+def addToken(token):
+    c.execute('INSERT INTO tokens VALUES (NULL,?)', (token,))
+    conn.commit()
+    return c.lastrowid
+
+def isTokenExists(token):
+    c.execute('SELECT count(token) FROM tokens WHERE token=' + token)
+    exists = c.fetchone()['count(token)']
+    if exists == 0:
+        return False
+    return True
+
+def deleteToken(token):
+    c.execute('DELETE FROM tokens WHERE token=?', (token,))
+    conn.commit()

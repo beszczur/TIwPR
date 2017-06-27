@@ -36,6 +36,13 @@ def createDatabase():
             FOREIGN KEY (repeatId) REFERENCES repeatOptions(id))')
         print('Successfully created table \'tasks\'')
 
+        print('Creating table \'tokens\'')
+        c.execute('CREATE TABLE tokens (\
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,\
+                    token text,\
+                    CONSTRAINT token_uniqsqlite uniqueue UNIQUE (token))')
+        print('Successfully created table \'tokens\'')
+
     conn.commit()
     conn.close()
 
