@@ -103,8 +103,8 @@ def addToken(token):
     return c.lastrowid
 
 def isTokenExists(token):
-    c.execute('SELECT count(token) FROM tokens WHERE token=' + token)
-    exists = c.fetchone()['count(token)']
+    c.execute('SELECT count(id) FROM tokens WHERE token=' + `token`)
+    exists = c.fetchone()['count(id)']
     if exists == 0:
         return False
     return True
@@ -112,3 +112,29 @@ def isTokenExists(token):
 def deleteToken(token):
     c.execute('DELETE FROM tokens WHERE token=?', (token,))
     conn.commit()
+
+############################### COMPLEX OPERATIONS ########################################################
+def addEventWithToken(name, position, date, repeatId, token):
+    conn.isolation_level = None
+    try:
+        c.execute('begin')
+        c.execute('DELETE FROM tokens WHERE token=?', (token,))
+        c.execute('INSERT INTO events VALUES (NULL,?,?,?,?)', (name, position, date, repeatId))
+        conn.commit()
+        return c.lastrowid
+    except sql.Error:
+        print("failed!")
+        c.execute("rollback")
+
+
+def addTaskWithToken(name, position, date, repeatId, token):
+    conn.isolation_level = None
+    try:
+        c.execute('begin')
+        c.execute('DELETE FROM tokens WHERE token=?', (token,))
+        c.execute('INSERT INTO tasks VALUES (NULL,?,?,?,?,?)', (eventId, name, priority, status, repeatId))
+        conn.commit()
+        return c.lastrowid
+    except sql.Error:
+        print("failed!")
+        c.execute("rollback")

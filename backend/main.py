@@ -52,7 +52,7 @@ class TokensHandler(tornado.web.RequestHandler):
                 except db.sqlite.IntegrityError:
                     self.write({'Token was existed': ':('})
             else:
-                self.write({'Missing token': 'in your request'})
+                self.write({'Exception': 'Missing token in your request'})
 
 
 class EventsCollectionHandler(tornado.web.RequestHandler):
@@ -66,14 +66,19 @@ class EventsCollectionHandler(tornado.web.RequestHandler):
     def post(self):  # DONE
         try:
             data = json.loads(self.request.body.decode('utf-8'))
-            if validateEvent(data):
-                eid = db.addEvent(data['name'], data['position'], data['date'], data['repeatId'])
-                self.write({'Event added, id:': eid})
-                self.set_header('location', '/events/' + `eid`)
-                self.set_status(statuses['Created'])
-            else:
-                self.write({'Exception': 'Missing or incorrect data in your request'})
+            token = self.request.headers.get('token')
+            if not token or not db.isTokenExists(token):
+                self.write({'Exception': 'Missing or invalid token in your request'})
                 self.set_status(statuses['BadRequest'])
+            else:
+                if validateEvent(data):
+                    eid = db.addEventWithToken(data['name'], data['position'], data['date'], data['repeatId'], token)
+                    self.write({'Event added, id:': eid})
+                    self.set_header('location', '/events/' + `eid`)
+                    self.set_status(statuses['Created'])
+                else:
+                    self.write({'Exception': 'Missing or incorrect data in your request'})
+                    self.set_status(statuses['BadRequest'])
         except ValueError:
             self.write({'Exception': 'Invalid JSON'})
             self.set_status(statuses['BadRequest'])
@@ -150,20 +155,24 @@ class TaskHandler(tornado.web.RequestHandler):
             if tid:
                 raise tornado.web.HTTPError(statuses['MethodNotAllowed'])
             else:
-                data = json.loads(self.request.body.decode('utf-8'))
-                if validateTask(data):
-                    if db.isEventExist(`data['eventId']`) and `data['eventId']` == eid:
-                        tid = db.addTask(data['eventId'], data['name'], data['priority'],
-                                         data['status'], data['repeatId'])
-                        self.write({'Task added, id:': tid})
-                        self.set_header('location', '/events/' + `data['eventId']` + '/tasks/' + `tid`)
-                        self.set_status(statuses['Created'])
-                    else:
-                        self.write({'Exception': 'Incorrect Event Id in your request'})
-                        self.set_status(statuses['NotFound'])
-                else:
-                    self.write({'Exception': 'Missing or incorrect data in your request'})
+                token = self.request.headers.get('token')
+                if not token or not db.isTokenExists(token):
+                    self.write({'Exception': 'Missing token in your request'})
                     self.set_status(statuses['BadRequest'])
+                else:
+                    data = json.loads(self.request.body.decode('utf-8'))
+                    if validateTask(data):
+                        if db.isEventExist(`data['eventId']`) and `data['eventId']` == eid:
+                            tid = db.addTaskWithToken(data['eventId'], data['name'], data['priority'], data['status'], data['repeatId'], token)
+                            self.write({'Task added, id:': tid})
+                            self.set_header('location', '/events/' + `data['eventId']` + '/tasks/' + `tid`)
+                            self.set_status(statuses['Created'])
+                        else:
+                            self.write({'Exception': 'Incorrect Event Id in your request'})
+                            self.set_status(statuses['NotFound'])
+                    else:
+                        self.write({'Exception': 'Missing or incorrect data in your request'})
+                        self.set_status(statuses['BadRequest'])
         except ValueError:
             self.write({'Exception': 'Invalid JSON'})
             self.set_status(statuses['BadRequest'])
