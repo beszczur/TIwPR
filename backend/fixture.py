@@ -40,12 +40,11 @@ def createDatabase():
         c.execute('CREATE TABLE tokens (\
                     id INTEGER PRIMARY KEY AUTOINCREMENT,\
                     token text,\
-                    CONSTRAINT token_uniqsqlite uniqueue UNIQUE (token))')
+                    CONSTRAINT token_unique UNIQUE (token))')
         print('Successfully created table \'tokens\'')
 
     conn.commit()
     conn.close()
 
-#FOREIGN KEY (parent_id) REFERENCES parent(id)
 if __name__ == "__main__":
     createDatabase()

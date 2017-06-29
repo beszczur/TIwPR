@@ -12,8 +12,8 @@ conn = sqlite.connect('todo.db')
 conn.row_factory = dict_factory
 c = conn.cursor()
 
-
 defaultPageSize = 5
+
 
 ####################################### EVENT ########################################################
 def addEvent(name, position, date, repeatId):
@@ -41,8 +41,22 @@ def getEventById(eid):
     return c.fetchall()
 
 
-def getEvents(chunkSize=defaultPageSize, pageNumber=0):
-    c.execute('SELECT * FROM events LIMIT ? OFFSET ?', (chunkSize, int(pageNumber)*int(chunkSize)))
+def getEvents(startDate='', endDate='', chunkSize=defaultPageSize, pageNumber=0):
+    if not startDate and not endDate:
+        c.execute('SELECT * '
+                  'FROM events '
+                  'ORDER BY id '
+                  'LIMIT ? OFFSET ?',
+                  (chunkSize, int(pageNumber) * int(chunkSize)))
+    else:
+        if startDate and not endDate:
+            endDate = startDate
+        c.execute('SELECT * '
+                  'FROM events '
+                  'WHERE (date BETWEEN ? and ?) '
+                  'ORDER BY id '
+                  'LIMIT ? OFFSET ?',
+                  (startDate, endDate, chunkSize, int(pageNumber) * int(chunkSize)))
     return c.fetchall()
 
 
@@ -80,7 +94,8 @@ def deleteTaskById(tid):
 
 
 def getTasksByEid(eid, chunkSize=defaultPageSize, pageNumber=0):
-    c.execute('SELECT * FROM tasks WHERE eventId=? LIMIT ? OFFSET ?', (eid, chunkSize, int(pageNumber)*int(chunkSize)))
+    c.execute('SELECT * FROM tasks WHERE eventId=? LIMIT ? OFFSET ?',
+              (eid, chunkSize, int(pageNumber) * int(chunkSize)))
     return c.fetchall()
 
 
@@ -96,11 +111,13 @@ def isTaskExist(tid):
         return False
     return True
 
+
 ####################################### TOKEN ########################################################
 def addToken(token):
     c.execute('INSERT INTO tokens VALUES (NULL,?)', (token,))
     conn.commit()
     return c.lastrowid
+
 
 def isTokenExists(token):
     c.execute('SELECT count(id) FROM tokens WHERE token=' + `token`)
@@ -109,9 +126,11 @@ def isTokenExists(token):
         return False
     return True
 
+
 def deleteToken(token):
     c.execute('DELETE FROM tokens WHERE token=?', (token,))
     conn.commit()
+
 
 ############################### COMPLEX OPERATIONS ########################################################
 def addEventWithToken(name, position, date, repeatId, token):

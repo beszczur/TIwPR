@@ -43,23 +43,25 @@ class MainHandler(tornado.web.RequestHandler):
 
 class TokensHandler(tornado.web.RequestHandler):
     def post(self):  # DONE
-            token = self.request.headers.get('token')
-            if token:
-                try:
-                    tokenId = db.addToken(token)
-                    self.write({'Token added, id:': tokenId})
-                    self.set_status(statuses['Created'])
-                except db.sqlite.IntegrityError:
-                    self.write({'Token was existed': ':('})
-            else:
-                self.write({'Exception': 'Missing token in your request'})
+        token = self.request.headers.get('token')
+        if token:
+            try:
+                tokenId = db.addToken(token)
+                self.write({'Token added, id:': tokenId})
+                self.set_status(statuses['Created'])
+            except db.sqlite.IntegrityError:
+                self.write({'Token was existed': ':('})
+        else:
+            self.write({'Exception': 'Missing token in your request'})
 
 
 class EventsCollectionHandler(tornado.web.RequestHandler):
     def get(self):  # DONE
         pageSize = self.get_argument('pageSize', db.defaultPageSize)
+        startDate = self.get_argument('startDate', '')
+        endDate = self.get_argument('endDate', '')
         page = self.get_argument('page', 0)
-        self.write(json.dumps(db.getEvents(pageSize, page)))
+        self.write(json.dumps(db.getEvents(startDate, endDate, pageSize, page)))
         self.set_header('Content-Type', 'application/json')
         self.set_status(statuses['OK'])
 
@@ -163,7 +165,8 @@ class TaskHandler(tornado.web.RequestHandler):
                     data = json.loads(self.request.body.decode('utf-8'))
                     if validateTask(data):
                         if db.isEventExist(`data['eventId']`) and `data['eventId']` == eid:
-                            tid = db.addTaskWithToken(data['eventId'], data['name'], data['priority'], data['status'], data['repeatId'], token)
+                            tid = db.addTaskWithToken(data['eventId'], data['name'], data['priority'], data['status'],
+                                                      data['repeatId'], token)
                             self.write({'Task added, id:': tid})
                             self.set_header('location', '/events/' + `data['eventId']` + '/tasks/' + `tid`)
                             self.set_status(statuses['Created'])
